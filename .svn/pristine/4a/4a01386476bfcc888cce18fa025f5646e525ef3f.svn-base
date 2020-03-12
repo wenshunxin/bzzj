@@ -1,0 +1,46 @@
+Page({
+    data:{
+        isfalg1:true,
+        isfalg2:false,
+        isfalg3:false,
+        count:1,
+        list:["子女","父母","配偶"],
+        demoIndex:0,
+
+        list1:["子女","父母","配偶"],
+        demoIndex1:0
+    },
+
+    bindPickerChange(e){
+        const { list,list1 } = this.data;
+        let index = e.detail.value
+        console.log(list[index])
+        
+        for(let i=0;i<list1)
+
+        this.setData({
+            demoIndex:index
+        })
+    },
+    bindPickerChange1(e){
+        this.setData({
+            demoIndex1:e.detail.value
+        })
+    },
+
+    hanldeAdd(){
+        const { count } = this.data;
+        let count1 = count+1;
+        if(count1 == 2){
+            this.setData({
+               isfalg2:true ,
+               count:count1
+            })
+        }else if(count1 ==3){
+            this.setData({
+               isfalg3:true ,
+               count:count1
+            })
+        }
+    }
+})

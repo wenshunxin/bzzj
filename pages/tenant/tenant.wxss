@@ -1,0 +1,75 @@
+/* pages/tenant/tenant.wxss */
+.scrollView{
+    width: 100%;
+    height:100vh;
+}
+.scrollView .main{
+    padding: 15rpx 10px;
+    box-sizing: border-box;
+}
+.content{
+    width:100%;
+    height:auto;
+    background: #fff;
+    padding-bottom: 10rpx;
+    /* padding: 20rpx 10rpx; */
+    box-sizing: border-box;
+    /* border-radius: 10rpx; */
+    /* margin-bottom: 20rpx; */
+}
+.title{
+    font-size: 32rpx;
+    font-weight: 600;
+    padding:10rpx 0 10rpx 10rpx;
+    box-sizing: border-box;
+    background: rgba(23,108,193,.6);
+    color: #fff;
+}
+.item{
+    padding: 10rpx 10rpx;
+    box-sizing: border-box;
+}
+.item>view:first-child{
+    height:40rpx;
+    font-size:28rpx;
+    font-weight: 600;
+    margin:16rpx 0 0;
+    display: flex;
+   
+}
+.item>input{
+    height:80rpx;
+    line-height: 80rpx;
+    border: 1px solid #f1f1f1;
+    width:100%;
+    box-sizing: border-box;
+    border-radius: 8rpx;
+    font-size: 32rpx;
+    padding-left: 10rpx;
+}
+.radio{
+    display: block;
+    margin:8rpx 0;
+}
+.picker input{
+    height:80rpx;
+    line-height: 80rpx;
+    border: 1px solid #f1f1f1;
+    width:100%;
+    box-sizing: border-box;
+    border-radius: 8rpx;
+    font-size: 32rpx;
+    padding-left: 10rpx;
+}
+.pickDisabled{
+    background: #F7F7F7;
+}
+image{
+    width:24rpx;
+    height:24rpx;
+    margin-top: -2rpx;
+    margin-left: -15rpx;
+}
+.van-checkbox__label{
+    margin-left: 6rpx !important;
+}

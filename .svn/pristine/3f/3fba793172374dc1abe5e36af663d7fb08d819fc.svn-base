@@ -1,0 +1,90 @@
+<!--index.wxml-->
+<!-- <view class="container">
+    <view class='notice-wrap'>
+        <view class='tongzhitext'>
+            <text class="tongzhi-text">您好！疫情防控人人有责，请您务必准确填报信息，这将是您进京入村的重要凭证。</text>
+        </view>
+    </view>
+    <view class="hmain">
+        <view class="header">北藏之家  温馨港湾</view>
+        <view>防疫信息填报系统</view>
+    </view>
+    
+    <view class="tabs">
+        <button class="btn" type="primary" data-url="tenant" bindtap="onTap">
+            我是租户
+        </button>
+        <button class="btn" type="primary" data-url="roomer" bindtap="onTap">
+            我是房东
+        </button>
+        <button class="btn" type="primary" data-url='healthy'  bindtap="onTap">
+            健康打卡
+        </button>
+    </view>
+
+    <view class="title">我是租户</view>
+    <view class="flex">
+        <view  style="background:#6577E4;"  data-url="tenant"  data-name="1" bindtap="onTap">
+            <image class="" src="../../static/1.png"  style="width:50rpx;height:50rpx;" mode="aspectFit" lazy-load="false" binderror="" bindload=""></image>
+            <view >
+                <text >离京返京</text>
+                <text>登记信息</text>
+            </view>
+        </view>
+
+        <view  style="background:#0081FF;"  data-url='healthy'  bindtap="onTap">
+            <image class="" src="../../static/3.png"  style="width:50rpx;height:50rpx;" mode="aspectFit" lazy-load="false" binderror="" bindload=""></image>
+            <view >
+                <text >健康打卡登记</text>
+            </view>
+        </view>
+    </view>
+    <view  class="title">我是房东</view>
+    <view class="flex">
+        <view  style="background:#39B54A;"  data-url='roomer'  bindtap="onTap">
+            <image class="" src="../../static/2.png"  mode="aspectFit" lazy-load="false" binderror="" bindload=""></image>
+            <view >
+                <text >出租房屋信息</text>
+            </view>
+        </view>
+
+        <view  style="background:#14C0D8;"  data-url="tenantinfo" data-name="2" bindtap="onTap">
+            <image class="" src="../../static/4.png"  style="width:50rpx;height:50rpx;" mode="aspectFit" lazy-load="false" binderror="" bindload=""></image>
+            <view >
+                <text >租户信息</text>
+            </view>
+        </view>
+    </view>
+
+    <van-notice-bar  text="您好，疫情防控人人有责，请您务必准确填报信息，这将是您进京入村的重要凭证。疫情期间请尽量延期返京，返京前务必联系房东是否符合居家隔离条件。" />
+</view> -->
+<!--  style="background-image:url('/static/bg.png');background-size: 100%;" -->
+<view class="wrap" >
+    <image id="imageBg" style="width:100%;height:100%;" src="../../static/bg.png" alt="" />
+    <view class="content">
+        <van-nav-bar title="选择身份" custom-class="warp_header" title-class="wrap_title" bind:click-left="onClickLeft" bind:click-right="onClickRight" />
+        <view class="main">        <!-- 标题 -->
+            <view class="header" style="flex:1;">
+                <view>北藏之家 温馨港湾</view>
+                <view>人员信息填报系统</view>
+            </view>
+            <view style="flex:1;">
+                <view class="item" style="height:110rpx;"  data-url="roomIndex"  bindtap="onTap">
+                    <!-- <image class="" src="../../static/room.png" mode="aspectFit" lazy-load="false" binderror="" bindload=""></image> -->
+                    <view class="" hover-class="none" hover-stop-propagation="false">我是房东</view>
+                    <!-- <image class="" src="../../static/right.png" mode="aspectFit|aspectFill|widthFix" lazy-load="false" binderror="" bindload=""></image> -->
+                </view>
+                <view class="item" style="margin-bottom:100rpx;height:110rpx;"  data-url="tenantIndex"  bindtap="onTap">
+                    <!-- <image class="" src="../../static/person.png" mode="aspectFit" lazy-load="false" binderror="" bindload=""></image> -->
+                    <view class="" hover-class="none" hover-stop-propagation="false">我是租户</view>
+                    <!-- <image class="" src="../../static/right.png" mode="aspectFit|aspectFill|widthFix" lazy-load="false" binderror="" bindload=""></image> -->
+                </view>
+            </view>
+            <view style="flex:1;">
+                <van-notice-bar backgroundColor="transparent" color="#fff" speed="50" text="您好，疫情防控人人有责，请您务必准确填报信息，这将是您进京入村的重要凭证。疫情期间请尽量延期返京，返京前务必联系房东是否符合居家隔离条件。" />
+            </view>
+            
+        </view>
+        
+    </view>
+</view>

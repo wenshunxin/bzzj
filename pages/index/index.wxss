@@ -1,0 +1,115 @@
+/**index.wxss**/
+.wrap{
+    width:100%;
+    height:100%;
+    position: relative;
+    overflow: hidden;
+}
+.imageBg{
+    position: fixed;
+    top:0;
+    left:0;
+    bottom:0;
+    right:0;
+    width:100%;
+    height:100%;
+    z-index:-1;
+}
+.content{
+    position: fixed;
+    top:0;
+    left:0;
+    bottom:0;
+    right:0;
+    width:100%;
+    height:100%;
+}
+.van-nav-bar{
+    background:transparent !important;
+}
+.van-hairline--bottom:after{
+    border:0 !important
+}
+.van-nav-bar__title{
+    color: #fff !important;
+}
+.header{
+    flex:1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    align-content: center;
+}
+.header view:first-child{
+    margin-top:60rpx;
+    font-size:60rpx;
+    text-align: center;
+    width:100%;
+    color:#fff;
+    font-weight: 600;
+    font-family: HeitiCSEG;
+}
+.header view:last-child{
+    font-size:40rpx;
+    color:#fff;
+    text-align: center;
+    width:100%;
+    line-height: 150rpx;
+    letter-spacing:6rpx;
+}
+.item{
+    display: flex;
+    width:593rpx;
+    height:190rpx;
+    background-color: #fff;
+    align-items: center;
+    align-content: center;
+    margin:auto;
+    margin-bottom: 50rpx;
+    border-radius: 20rpx;
+    padding: 0 32rpx;
+    box-sizing: border-box;
+    justify-content: space-around;
+}
+
+.item image:last-child{
+    width:24rpx;
+    height:44rpx;
+}
+.item view{
+    color:#0A548A;
+    font-size:34rpx;
+    font-weight: 600;
+}
+.item:last-child{
+    margin-bottom: 100rpx;
+}
+.van-notice-bar__content{
+    font-size: 36rpx;
+}
+.main{
+    height:calc(100% - 64px);
+    display: flex;
+    flex-direction: column;
+    justify-content:space-between;
+    align-items: center;
+    align-content: center;
+    position: relative;
+}
+.van-notice-bar__wrap {
+    position: absolute !important;
+    right:40rpx;
+    left:40rpx;
+    bottom: 260rpx;
+}
+.van-nav-bar__left,.van-nav-bar__right{
+    display: inline-block !important;
+}
+.serve{
+    position: absolute;
+    bottom:80rpx;
+    font-size: 28rpx;
+    color: #fff;
+    text-align: center;
+    display: flex;
+}

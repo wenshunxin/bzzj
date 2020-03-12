@@ -1,0 +1,29 @@
+<!--pages/tenantinfo/tenantinfo.wxml-->
+<view class="container">
+    <view class="tenantInfo">
+        <block wx:for="{{list}}" wx:key="name"  wx:for-index="idx"  wx:for-item="itemName">
+            <view class="title">租户{{idx+1}}</view>
+            <view class="content">
+                <view  class="item">
+                    <view>姓名：</view>
+                    <view>{{itemName.userName}}</view>
+                </view>
+                <view class="item">
+                    <view>姓别：</view>
+                    <view>{{itemName.sex}}</view>
+                </view>
+                <view class="item">
+                    <view>手机号：</view>
+                    <view>{{itemName.mobile}}</view>
+                </view>
+                <view class="item">
+                    <view>证件号：</view>
+                    <view   style="border:0;">{{itemName.idNumber}}</view>
+                </view>
+            </view>
+        </block>
+    </view>
+    <view wx:if="{{list.length == 0}}" class='noData'>
+        无租户信息
+    </view>
+</view>  

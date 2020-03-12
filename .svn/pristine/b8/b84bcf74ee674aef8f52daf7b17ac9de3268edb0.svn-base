@@ -1,0 +1,2 @@
+/* pages/roomer/roomer.wxss */
+@import "../tenant/tenant"

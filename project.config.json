@@ -1,0 +1,104 @@
+{
+	"description": "项目配置文件",
+	"packOptions": {
+		"ignore": []
+	},
+	"setting": {
+		"urlCheck": false,
+		"es6": true,
+		"postcss": true,
+		"minified": true,
+		"newFeature": true,
+		"coverView": true,
+		"autoAudits": false,
+		"showShadowRootInWxmlPanel": true,
+		"scopeDataCheck": false,
+		"checkInvalidKey": true,
+		"checkSiteMap": false,
+		"uploadWithSourceMap": true,
+		"babelSetting": {
+			"ignore": [],
+			"disablePlugins": [],
+			"outputPath": ""
+		}
+	},
+	"compileType": "miniprogram",
+	"libVersion": "2.10.2",
+	"appid": "wx3ae9bdc0f6227a1a",
+	"projectname": "bzzj",
+	"debugOptions": {
+		"hidedInDevtools": []
+	},
+	"isGameTourist": false,
+	"simulatorType": "wechat",
+	"simulatorPluginLibVersion": {},
+	"condition": {
+		"search": {
+			"current": -1,
+			"list": []
+		},
+		"conversation": {
+			"current": -1,
+			"list": []
+		},
+		"plugin": {
+			"current": -1,
+			"list": []
+		},
+		"game": {
+			"currentL": -1,
+			"list": []
+		},
+		"gamePlugin": {
+			"current": -1,
+			"list": []
+		},
+		"miniprogram": {
+			"current": -1,
+			"list": [
+				{
+					"id": -1,
+					"name": "-- 离京返京登记信息 --",
+					"pathName": "pages/tenant/tenant",
+					"query": ""
+				},
+				{
+					"id": -1,
+					"name": "-- 我是房东出租房信息 --",
+					"pathName": "pages/roomer/roomer",
+					"query": ""
+				},
+				{
+					"id": -1,
+					"name": "-- 健康打卡 --",
+					"pathName": "pages/healthy/healthy",
+					"query": ""
+				},
+				{
+					"id": -1,
+					"name": "-- 我的租户信息 -- ",
+					"pathName": "pages/tenantinfo/tenantinfo",
+					"query": ""
+				},
+				{
+					"id": -1,
+					"name": "-- 测试家庭成员 -- ",
+					"pathName": "pages/demo/demo",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "-- 我是房主首页 --",
+					"pathName": "pages/roomIndex/roomIndex",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "-- 我是租户首页 -- ",
+					"pathName": "pages/tenantIndex/tenantIndex"
+				}
+			]
+		}
+	}
+}

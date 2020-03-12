@@ -1,0 +1,40 @@
+
+import http from "../../utils/http";
+var appInst =  getApp();
+Page({
+    data:{
+        list:[]
+    },
+    onLoad(){
+        let that = this;
+        // http(`/investigationController/getTenantInfoByOpenid.act?openid=${appInst.globalData.openId}`)
+        // .then(res=>{
+        //     if(res.data.rtState){
+        //         that.setData({
+        //             list:res.data.rtData
+        //         })
+        //     }
+        // })
+        console.log(appInst.globalData.openId)
+        wx.request({
+            url:`https://www.xdmhome.cn/bzzj/investigationController/getTenantInfoByOpenid.act?openid=${appInst.globalData.openId}`,
+            methods:"POST",
+            success(res){
+               that.setData({
+                    list:res.data.rtData
+                })
+            }
+        })
+    },
+    handleGetTenantInfoByOpenid(){
+        let that = this;
+        http(`/investigationController/getTenantInfoByOpenid.act?openid=${appInst.globalData.openId}`)
+        .then(res=>{
+            if(res.data.rtState){
+                that.setData({
+                    list:res.data.rtData
+                })
+            }
+        })
+    }
+})

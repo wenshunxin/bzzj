@@ -1,0 +1,2 @@
+/* pages/tenantIndex/tenantIndex.wxss */
+@import "../index/index";

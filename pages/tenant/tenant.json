@@ -1,0 +1,8 @@
+{
+    "navigationBarTitleText": "离京返京登记信息",
+    "usingComponents": {
+        "van-radio": "../../dist/radio/index",
+        "van-radio-group": "../../dist/radio-group/index",
+        "van-checkbox": "../../dist/checkbox/index"
+    }
+}

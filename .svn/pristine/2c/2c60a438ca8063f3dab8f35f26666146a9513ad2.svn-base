@@ -1,0 +1,17 @@
+<form  bindsubmit="formSubmit" bindreset="formReset">
+    <view>姓名:</view>
+    <input name="name" id="name" />
+    <checkbox-group  name="checkbox">
+        <label class="checkbox" wx:for="{{items}}" wx:key="name">
+            <checkbox  value="{{item.name}}" checked="{{item.checked}}" />
+            {{item.value}}
+        </label>
+    </checkbox-group>
+
+    <radio-group class="radio-group" name="radio" bindchange="radioChange">
+        <radio class="radio" wx:for-items="{{items1}}" wx:key="name" value="{{item.name}}" checked="{{item.checked}}">
+            <text>{{item.value}}</text>
+        </radio>
+    </radio-group>
+    <button formType="submit">Submit</button>
+</form>

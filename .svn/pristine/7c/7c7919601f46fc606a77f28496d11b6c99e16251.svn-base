@@ -1,0 +1,14 @@
+/* pages/demo/demo.wxss */
+@import "../tenant/tenant";
+.flexDiv{
+    display: flex;
+    justify-content: space-between;
+}
+.flexDiv button{
+    margin:0;
+}
+.item input{
+    height:80rpx;
+    line-height: 80rpx;
+    border:1px solid #999;
+}

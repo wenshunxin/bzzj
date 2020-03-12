@@ -1,0 +1,229 @@
+import http from "../../utils/http";
+let appInst = getApp();
+Page({
+    data:{
+        day:new Date(),
+        items1:[
+            "良好","不舒服"
+        ],
+        items2:['有',"无"],
+        items: [
+            {name:"发热",checked:false},
+            {name:"乏力",checked:false},
+            {name:"干咳",checked:false},
+            {name:"呼吸困难",checked:false},
+            {name:"其他",checked:false}],
+
+        disabledChecbox:false,
+
+        items3: ["37.2度以下", "37.2度以上"],
+        items4: ["37.2度以下", "37.2度以上"],
+        items5: ["37.2度以下", "37.2度以上"],
+
+        startDate: "2020-02-25",
+        openId:"",
+        checkinInfo:{
+            sid:"",
+            checkinDate:"",
+            userName:"",
+            userMobile:"",
+            healthyStatus:"",
+            bodyStatus:"",
+            goOut:"",
+            forenoon:"",
+            noon:"",
+            night:""
+        }
+    },
+    onLoad(){
+        let year = new Date().getFullYear();
+        let month = (~~new Date().getMonth()+1)>9?(~~new Date().getMonth()+1):"0"+(~~new Date().getMonth()+1);
+        let day = new Date().getDate()>9?new Date().getDate():"0"+new Date().getDate();
+        this.setData({
+            startDate: `${year}年${month}月${day}日`,
+            "checkinInfo.checkinDate":`${year}-${month}-${day}`,
+            openId:appInst.globalData.openId
+        });
+
+        this.handleGetNameAndMobile();
+    },  
+
+    // 获取 当前姓名和手机号
+    handleGetNameAndMobile(){
+        http(`/investigationController/getCurTenantInfo.act?openid=${appInst.globalData.openId}`)
+        .then(res=>{
+            if(res.data.rtState){
+                this.setData({
+                    "checkinInfo.userName":res.data.rtData.userName,
+                    "checkinInfo.userMobile":res.data.rtData.mobile
+                })
+            }
+        })
+    },
+
+    bindPickerChangeCheckDate(e){
+        this.setData({
+            startDate:e.detail.value,
+            "checkinInfo.checkinDate":e.detail.value
+        })
+    },
+    radioChangeHealthyStatus(e){
+        console.log(e)
+        let value = e.detail.value;
+        let { items } = this.data;
+        
+
+        if(value == "良好"){
+            items.forEach(item=>{
+                item['checked']=false;
+            })
+            this.setData({
+                disabledChecbox:true,
+                items
+            })
+        }else{
+            this.setData({
+                disabledChecbox:false
+            })
+        }
+
+        this.setData({
+            "checkinInfo.healthyStatus":e.detail.value,
+        })
+    },
+    checkboxChange(e){
+        this.setData({
+            "checkinInfo.bodyStatus":e.detail.value.join(",")
+        })
+    },
+    radioChangeGoOut(e){
+        this.setData({
+            "checkinInfo.goOut":e.detail.value
+        })
+    },
+    radioChangeForenoon(e){
+        this.setData({
+            "checkinInfo.forenoon": e.detail.value
+        })
+    },
+    radioChangeNoon(e) {
+        this.setData({
+            "checkinInfo.noon": e.detail.value
+        })
+    },
+    radioChangeNight(e) {
+        this.setData({
+            "checkinInfo.night": e.detail.value
+        })
+    },
+    formSubmit(e){
+        let { checkinInfo } = this.data;
+        let objData = e.detail.value;
+        if (objData.userName == '' || objData.userName == null){
+            wx.showToast({
+                title: '请填写姓名',
+                icon: 'none',
+                duration: 2000
+            });
+            return false;
+        }
+
+        if (objData.userMobile == '' || objData.userMobile == null) {
+            wx.showToast({
+                title: '请填写电话',
+                icon: 'none',
+                duration: 2000
+            });
+            return false;
+        }
+        // 健康状况
+        if (checkinInfo.healthyStatus == '' || checkinInfo.healthyStatus == null) {
+            wx.showToast({
+                title: '请选择康状况',
+                icon: 'none',
+                duration: 2000
+            });
+            return false;
+        }
+
+        if(checkinInfo.healthyStatus == "不舒服"){
+             // 身体症状
+            if (checkinInfo.bodyStatus == '' || checkinInfo.bodyStatus == null) {
+                wx.showToast({
+                    title: '请选择身体症状',
+                    icon: 'none',
+                    duration: 2000
+                });
+                return false;
+            }
+        }else{
+            this.setData({
+                "checkinInfo.bodyStatus":""
+            })
+        }
+       
+
+        if (checkinInfo.goOut == '' || checkinInfo.goOut == null) {
+            wx.showToast({
+                title: '请选择有无外出',
+                icon: 'none',
+                duration: 2000
+            });
+            return false;
+        }
+
+        if (checkinInfo.forenoon == '' || checkinInfo.forenoon == null) {
+            wx.showToast({
+                title: '请选择早上体温',
+                icon: 'none',
+                duration: 2000
+            });
+            return false;
+        }
+
+
+        if (checkinInfo.noon == '' || checkinInfo.noon == null) {
+            wx.showToast({
+                title: '请选择中午体温',
+                icon: 'none',
+                duration: 2000
+            });
+            return false;
+        }
+
+
+        if (checkinInfo.night == '' || checkinInfo.night == null) {
+            wx.showToast({
+                title: '请选择晚上体温',
+                icon: 'none',
+                duration: 2000
+            });
+            return false;
+        }
+        
+        for (let key in checkinInfo) {
+            if (objData.hasOwnProperty(key)) {
+                checkinInfo[key] = objData[key];
+            }
+        }
+        // checkinInfo['addTime'] = new Date().getFullYear() + "-" + new Date().getMonth() + 1 + "-" + new Date().getDay();
+        this.setData({
+            checkinInfo
+        });
+        http(`/investigationController/addCheckinInfo.act`,Object.assign({},this.data.checkinInfo,{'openid':appInst.globalData.openId}))
+        .then(res=>{
+            if(res.data.rtState){
+                wx.showToast({
+                    title:"保存成功",
+                    icon:"success",
+                    duration:2000,
+                    success(){
+                        wx.navigateBack();
+                    }
+                })
+            }
+            
+        })
+        // console.log(this.data.checkinInfo)
+    }
+})

@@ -1,0 +1,34 @@
+<view class="wrap" >
+    <image id="imageBg" style="width:100%;height:100%;" src="../../static/bg.png" alt="" />
+    <view class="content">
+        <van-nav-bar title="选择身份" custom-class="warp_header" title-class="wrap_title" bind:click-left="onClickLeft" bind:click-right="onClickRight" />
+        <view class="main">        <!-- 标题 -->
+            <view class="header" style="flex:1;">
+                <view>北藏之家 温馨港湾</view>
+                <view>人员信息填报系统</view>
+            </view>
+            <view style="flex:1;">
+                <view class="item" style="height:110rpx;"  data-url="roomIndex"  bindtap="onTap">
+                    <!-- <image class="" src="../../static/room.png" mode="aspectFit" lazy-load="false" binderror="" bindload=""></image> -->
+                    <view class="" hover-class="none" hover-stop-propagation="false">我是房东</view>
+                    <!-- <image class="" src="../../static/right.png" mode="aspectFit|aspectFill|widthFix" lazy-load="false" binderror="" bindload=""></image> -->
+                </view>
+                <view class="item" style="margin-bottom:100rpx;height:110rpx;"  data-url="tenantIndex"  bindtap="onTap">
+                    <!-- <image class="" src="../../static/person.png" mode="aspectFit" lazy-load="false" binderror="" bindload=""></image> -->
+                    <view class="" hover-class="none" hover-stop-propagation="false">我是租户</view>
+                    <!-- <image class="" src="../../static/right.png" mode="aspectFit|aspectFill|widthFix" lazy-load="false" binderror="" bindload=""></image> -->
+                </view>
+            </view>
+            <view style="flex:1;width:100%;">
+                <van-notice-bar backgroundColor="transparent" color="#fff" speed="50" text="您好，疫情防控人人有责，请您务必准确填报信息，这将是您进京入村的重要凭证。疫情期间请尽量延期返京，返京前务必联系房东是否符合居家隔离条件。" />
+            </view>
+            
+            <view class="serve">
+                <van-checkbox value="{{ checked }}"  checked-color="#176CC1" shape="square" bind:change="onChange">
+                    我已阅读并接受
+                </van-checkbox><text style="color:red;" bindtap="handleGoServe">《用户使用协议》</text>
+            </view>
+        </view>
+        
+    </view>
+</view>

@@ -1,0 +1,697 @@
+/**
+ * @Date:   2020-03-06T17:58:22+08:00
+ * @Last modified time: 2020-03-08T13:26:27+08:00
+ */
+
+
+import http from "../../utils/http";
+let appInst =  getApp();
+
+Page({
+    data:{
+        items:['离京未返京',"离京已返京","未离京"],
+        items1:["男",'女'],
+        items2:["二代身份证","护照","港澳台居民来往通行证","台湾居民来往大陆通行证"],
+        items3: [
+            {name:"从武汉地区或经停武汉地区到京的",checked:false},
+            {name:"从武汉以外其他湖北地区或经停武汉以外其他湖北地区到京的",checked:false},
+            {name:"从其他省市地区或经停其他省市地区到京的",checked:false},
+        ],
+        items4: [{ name: "火车", checked: false }, { name: "自驾", checked: false }, { name: "长途客运", checked: false }, { name:"飞机",checked:false}],
+        items5: [{name:"居家",checked:false},{name:"集中点隔离",checked:false}],
+        items6: [{name:"是",checked:false},{name:"否",checked:false}],
+        areas: [],
+        streetName:[],
+        communityName:[],
+        areasIndex:0,
+        streetNameIndex:0,
+        communityNameIndex:0,
+        date:'',
+        date1:"",
+        date2:"",
+        pickDisabled:false,
+        pickDisabled1:false,
+        pickDisabled2:false,
+
+
+        // 在京其他家庭成员信息 如无 或者 不在京 其他项不可填写
+        disabledNoBjMate:false, //配偶
+        disabledNoBjChild:false, //子女
+        disabledNoBjparent:false, // 父母
+
+
+        tenantInfo:{
+            // sid: "",
+            inStatus: "",
+            leaveDate: "",
+            returnDate: "",
+            expectReturnDate: "",
+            // 个人信息
+            userName: "",
+            sex: "",
+            mobile: "",
+            idType: "",
+            idNumber: "",
+            workName: "",
+            workCompany: "",
+            // 居住地址
+            area: "",
+            street: "",
+            community: "",
+            detailAddress: "",
+
+            // 返京前所在地址
+            returnProvince: "",
+            returnCity: "",
+            returnCounty: "",
+            returnStreet:'',
+            returnDetailAddress: "",
+            // 在京其他家庭成员
+            spouseName: "",
+            spouseMobile: "",
+            spouseIdNumber: "",
+            childrenNames: "",
+            childrenIdNumbers: "",
+            parentNames: "",
+            parentIdNumbers: "",
+
+            // 房东信息
+            landlordName: "",
+            landlordMobile: "",
+            landlordWeixin: "",
+            // 疫情防控相关信息
+            relation: "",
+            returnTraffic: "",
+            divideType: "",
+            isSingleRoom: "",
+
+            addTime:""
+        },
+
+
+        provinceList:[],
+        provinceListIndex:0,
+        cityList:[],
+        cityListIndex:0,
+        countyList:[],
+        countyListIndex:0
+    },
+
+    onLoad(options){
+        wx.setNavigationBarTitle({
+            title: options.name == 1 ? '离京返京人员信息登记表' :'租户信息'
+        });
+        this.handleGetAreaList();
+        this.handleGetProvinceList();
+    },
+
+    // 获取全国省
+    handleGetProvinceList(){
+        http(`/cityController/getProvinceList.act`)
+        .then(res=>{
+            if (res.data.rtState){
+                this.setData({
+                    provinceList:res.data.rtData
+                },()=>{
+                    this.setData({
+                        "tennatInfo.returnProvince": res.data.rtData[0].cityFullName
+                    })
+                    this.handleGetCityList(res.data.rtData[0].cityCode)
+                })
+            }
+        })
+    },
+    // 获取地级市
+    handleGetCityList(cityCode){
+        http(`/cityController/getCityListByCode.act?cityCode=${cityCode}`)
+        .then(res=>{
+            if (res.data.rtState) {
+                this.setData({
+                    cityList: res.data.rtData,
+                    cityListIndex:0
+                }, () => {
+                    this.setData({
+                        "tennatInfo.returnCity": res.data.rtData[0].cityFullName
+                    })
+                    this.handleGetCountyList(res.data.rtData[0].cityCode)
+                })
+            }
+        })
+    },
+    handleGetCountyList(cityCode){
+        http(`/cityController/getCountyListByCode.act?cityCode=${cityCode}`)
+            .then(res => {
+                if (res.data.rtState) {
+                    this.setData({
+                        countyList: res.data.rtData,
+                        countyListIndex: 0,
+                        
+                    }, () => {
+                        this.setData({
+                            "tennatInfo.returnCounty": res.data.rtData.length ? res.data.rtData[0].cityFullName:''
+                        })
+                    })
+                }
+            })
+    },
+    bindPickerChangeProvince(e){
+        this.setData({
+            provinceListIndex:e.detail.value,
+            "tenantInfo.returnProvince": this.data.provinceList[e.detail.value].cityFullName
+        },()=>{
+            this.handleGetCityList(this.data.provinceList[e.detail.value].cityCode)
+        })
+    },
+    bindPickerChangeCityList(e){
+        // console.log(e)
+        this.setData({
+            cityListIndex: e.detail.value,
+            "tenantInfo.returnCity": this.data.cityList[e.detail.value].cityFullName
+        }, () => {
+            this.handleGetCountyList(this.data.cityList[e.detail.value].cityCode)
+        })
+    },  
+    bindPickerChangeCountyList(e){
+        this.setData({
+            countyListIndex:e.detail.value,
+            "tenantInfo.returnCounty":this.data.countyList[e.detail.value].cityFullName
+        })
+    },
+    // 获取区列表
+    handleGetAreaList(){
+        http("/areaInfoController/getAreaList.act")
+        .then(res=>{
+            if (res.data.rtState){
+                
+                this.setData({
+                    areas: [{"areaName":"请选择区"}].concat(res.data.rtData)
+                },()=>{
+                    // this.setData({
+                    //     "tenantInfo.area":this.data.areas[this.data.areasIndex].areaName
+                    // })
+                    this.handleGetStreetList(this.data.areas[this.data.areasIndex].areaName)
+                })
+            }
+        })
+    },
+    // 获取乡镇/街道
+    handleGetStreetList(areaName){
+        http("/areaInfoController/getStreetList.act?areaName=" + areaName)
+        .then(res=>{
+            if (res.data.rtState) {
+                this.setData({
+                    streetName: [{"streetName":"请选择乡镇/街道"}].concat(res.data.rtData)
+                }, () => {
+                    // this.setData({
+                    //     "tenantInfo.street":this.data.streetName[this.data.streetNameIndex].streetName
+                    // })
+                    this.handleGetCommunityList(this.data.streetName[this.data.streetNameIndex].areaName, this.data.streetName[this.data.streetNameIndex].streetName)
+                })
+            }
+        })
+    },
+    // 获取存列表
+    handleGetCommunityList(areaName,streetName){
+        http(`/areaInfoController/getCommunityList.act?areaName=${areaName}&streetName=${streetName}`)
+        .then(res=>{
+            // console.log(res)
+            if (res.data.rtState) {
+                this.setData({
+                    communityName: [{"communityName":" 请选择村"}].concat(res.data.rtData)
+                }, () => {
+                    // this.setData({
+                    //     "tenantInfo.community":this.data.communityName[this.data.communityNameIndex].communityName
+                    // })
+                    // this.handleGetCommunityList(res.data.rtData[0].areaName, res.data.rtData[0].streetName)
+                })
+            }
+        })
+    },
+    radioChange(e){
+        let value = e.detail.value;
+        this.setData({
+            "tenantInfo.inStatus":value
+        })
+        let { pickDisabled, pickDisabled1, pickDisabled2,items3,items4,items5,items6 } = this.data;
+        items3.forEach(item=>{
+            item['checked'] = false;
+        });
+        items4.forEach(item=>{
+            item['checked'] = false;
+        })
+        items5.forEach(item=>{
+            item['checked'] = false;
+        })
+        items6.forEach(item=>{
+            item['checked'] = false;
+        });
+
+        this.setData({
+            items3,items4,items5,items6
+        })
+        if(value == '未离京'){
+            this.setData({
+                pickDisabled:true,
+                pickDisabled1:true,
+                pickDisabled2:true,
+                date: '',
+                date1: "",
+                date2: ""
+            })
+
+            
+        }else if(value == '离京未返京'){
+            this.setData({
+                pickDisabled:false,
+                pickDisabled1:true,
+                pickDisabled2:false,
+                date1: ""
+            })
+        }else{
+            this.setData({
+                pickDisabled:false,
+                pickDisabled1:false,
+                pickDisabled2:true,
+                date2: ""
+            })
+        }
+        
+    },
+    bindDateChange(e){
+        this.setData({
+            date:e.detail.value,
+            "tenantInfo.leaveDate": e.detail.value
+        })
+    },
+    bindDateChange1(e){
+        // console.log(e)
+        this.setData({
+            date1:e.detail.value,
+            "tenantInfo.returnDate": e.detail.value
+        })
+    },
+    bindDateChange2(e){
+        this.setData({
+            date2:e.detail.value,
+            "tenantInfo.expectReturnDate": e.detail.value
+        })
+    },
+    // 选择在京居住地址 区域选择
+    bindPickerChange: function (e) {
+        this.setData({
+            areasIndex: e.detail.value
+        },()=>{
+            this.setData({
+                "tenantInfo.area": this.data.areas[this.data.areasIndex].areaName
+            });
+            this.handleGetStreetList(this.data.areas[this.data.areasIndex].areaName)
+        })
+    },
+
+    bindPickerChangeStreetName(e){
+        this.setData({
+            streetNameIndex: e.detail.value
+        }, () => {
+            this.setData({
+                "tenantInfo.street": this.data.streetName[this.data.streetNameIndex].streetName
+            });
+            this.handleGetCommunityList(this.data.streetName[this.data.streetNameIndex].areaName, this.data.streetName[this.data.streetNameIndex].streetName)
+        })
+    },
+    bindPickerChangeCommunityName(e){
+        this.setData({
+            communityNameIndex: e.detail.value
+        }, () => {
+            this.setData({
+                "tenantInfo.community":this.data.communityName[e.detail.value].communityName
+            })
+        })
+    },
+    // 在京其他成员
+    // 配偶
+    handleNoBjMate(e){
+        let value = e.detail.value;
+        let disabledNoBjMate = false;
+        if(value == "不在京"){
+            disabledNoBjMate = true;
+
+        }else{
+            disabledNoBjMate = false;
+        }
+        this.setData({
+            disabledNoBjMate
+        })
+    },
+    handleNoBjChild(e) {
+        let value = e.detail.value;
+        let disabledNoBjChild = false;
+        if (value == "不在京") {
+            disabledNoBjChild = true;
+        } else {
+            disabledNoBjChild = false;
+        }
+        this.setData({
+            disabledNoBjChild
+        })
+    },
+    handleNoBjParent(e) {
+        let value = e.detail.value;
+        let disabledNoBjParent = false;
+        if (value == "不在京") {
+            disabledNoBjParent = true;
+        } else {
+            disabledNoBjParent = false;
+        }
+        this.setData({
+            disabledNoBjParent
+        })
+    },
+    // 个人信息性别
+    radioChangeSex(e){
+        this.setData({
+            'tenantInfo.sex':e.detail.value
+        })
+    },
+    // 个人证件类型
+    radioChangeIdType(e){
+        this.setData({
+            "tenantInfo.idType":e.detail.value
+        })
+    },
+    // 与疫情有关
+    radioChangeRelation(e){
+        this.setData({
+            "tenantInfo.relation":e.detail.value
+        })
+    },
+    radioChangeReturnTraffic(e) {
+        this.setData({
+            "tenantInfo.returnTraffic": e.detail.value
+        })
+    },
+    radioChangeDivideType(e) {
+        this.setData({
+            "tenantInfo.divideType": e.detail.value
+        })
+    },
+    radioChangeIsSingleRoom(e) {
+        this.setData({
+            "tenantInfo.isSingleRoom": e.detail.value
+        })
+    },
+    formSubmit: function (e) {
+        console.log('form发生了submit事件，携带数据为：', e.detail.value)
+        let { tenantInfo } = this.data;
+        let objData = e.detail.value;
+
+
+        if(tenantInfo.inStatus == "" || tenantInfo.inStatus == null){
+            wx.showToast({
+                title: '请选择在京状态',
+                icon: 'none',
+                duration: 2000
+            });
+            return false;
+        }
+
+
+        if (tenantInfo.inStatus == '离京未返京'){
+            if (tenantInfo.leaveDate == "" || tenantInfo.leaveDate== null){
+                wx.showToast({
+                    title: '请选择离京日期',
+                    icon: 'none',
+                    duration: 2000
+                });
+                return false;
+            }
+            if (tenantInfo.expectReturnDate == "" || tenantInfo.expectReturnDate ==null){
+                wx.showToast({
+                    title: '请选择预计返京日期',
+                    icon: 'none',
+                    duration: 2000
+                });
+                return false;
+            }
+        }
+
+        if (tenantInfo.inStatus == '离京已返京'){
+            if (tenantInfo.leaveDate == "" || tenantInfo.leaveDate == null) {
+                wx.showToast({
+                    title: '请选择离京日期',
+                    icon: 'none',
+                    duration: 2000
+                });
+                return false;
+            }
+            if (tenantInfo.returnDate == "" || tenantInfo.returnDate == null) {
+                wx.showToast({
+                    title: '请选择返京日期',
+                    icon: 'none',
+                    duration: 2000
+                });
+                return false;
+            }
+        }
+
+
+        
+        // 个人姓名
+
+        if (objData.userName == "" || objData.userName == null){
+            wx.showToast({
+                title: '请填写个人姓名',
+                icon: 'none',
+                duration: 2000
+            });
+            return false;
+        }
+
+        // 个人信息性别
+        if (tenantInfo.sex == "" || tenantInfo.sex == null){
+            wx.showToast({
+                title: '请选择个人性别',
+                icon: 'none',
+                duration: 2000
+            });
+            return false;
+        }
+        // 个人信息手机号
+        if (objData.mobile == "" || objData.mobile == null){
+            wx.showToast({
+                title: '请填写个人手机号',
+                icon: 'none',
+                duration: 2000
+            });
+            return false;
+        }
+        // 个人证件类型
+        if(tenantInfo.idType == "" || tenantInfo.idType == null){
+            wx.showToast({
+                title: '请选择个人证件类型',
+                icon: 'none',
+                duration: 2000
+            });
+            return false;
+        }
+        // 个人证件号
+        if (objData.idNumber == '' || objData.idNumber == null){
+            wx.showToast({
+                title: '请填写个人证件号',
+                icon: 'none',
+                duration: 2000
+            });
+            return false;
+        }
+        // 个人从事工作
+        if (objData.workName == "" || objData.workName == null){
+            wx.showToast({
+                title: '请填写个人从事工作',
+                icon: 'none',
+                duration: 2000
+            });
+            return false;
+        }
+        // 个人工作单位
+        if (objData.workCompany == "" || objData.workCompany == null) {
+            wx.showToast({
+                title: '请填写个人工作单位',
+                icon: 'none',
+                duration: 2000
+            });
+            return false;
+        }
+
+
+        // 在京居住地址信息验证
+        // 街道暂时下拉选择
+
+        // cun
+        // if (objData.community == '' || objData.community == null){
+        //     wx.showToast({
+        //         title: '请填写在京居住地址村',
+        //         icon: 'none',
+        //         duration: 2000
+        //     });
+        //     return false;
+        // }   
+        // 门牌号
+        if (objData.detailAddress == '' || objData.detailAddress == null) {
+            wx.showToast({
+                title: '请填写在京居住地址门牌号',
+                icon: 'none',
+                duration: 2000
+            });
+            return false;
+        }   
+
+        if(tenantInfo.inStatus  !="未离京"){
+            if(objData.returnStreet == "" || objData.returnStreet == null){
+                 wx.showToast({
+                    title: '请填写返京前乡镇/街道',
+                    icon: 'none',
+                    duration: 2000
+                });
+                return false;   
+            } 
+            if(objData.returnDetailAddress == "" || objData.returnDetailAddress == null){
+                 wx.showToast({
+                    title: '请填写返京前门牌号',
+                    icon: 'none',
+                    duration: 2000
+                });
+                return false;
+            } 
+        }
+
+        // 在京其他家庭成员
+        // 配偶
+        if(objData.spouseName != "不在京"){
+            if (objData.spouseMobile == "" || objData.spouseMobile == null){
+                wx.showToast({
+                    title: '请填写配偶手机号',
+                    icon: 'none',
+                    duration: 2000
+                });
+                return false;
+            }
+
+            if (objData.spouseIdNumber == "" || objData.spouseIdNumber == null) {
+                wx.showToast({
+                    title: '请填写配偶二代身份证号',
+                    icon: 'none',
+                    duration: 2000
+                });
+                return false;
+            }
+        }
+        // 子女
+        if (objData.childrenNames != "不在京") {
+            if (objData.childrenIdNumbers == "" || objData.childrenIdNumbers == null) {
+                wx.showToast({
+                    title: '请填写子女二代身份证号',
+                    icon: 'none',
+                    duration: 2000
+                });
+                return false;
+            }
+        }
+        // 父母
+        if (objData.parentNames != "不在京") {
+            if (objData.parentIdNumbers == "" || objData.parentIdNumbers == null) {
+                wx.showToast({
+                    title: '请填写父母二代身份证号',
+                    icon: 'none',
+                    duration: 2000
+                });
+                return false;
+            }
+        }
+
+        // 房东信息
+
+        if (objData.landlordName == "" || objData.landlordName == null){
+            wx.showToast({
+                title: '请填写房东姓名',
+                icon: 'none',
+                duration: 2000
+            });
+            return false;
+        }
+        if (objData.landlordMobile == "" || objData.landlordMobile == null) {
+            wx.showToast({
+                title: '请填写房东手机号',
+                icon: 'none',
+                duration: 2000
+            });
+            return false;
+        }
+
+
+        if (tenantInfo.inStatus == '离京已返京'){
+            if (tenantInfo.relation == "" || tenantInfo.relation == null){
+                wx.showToast({
+                    title: '请选择与疫情关系',
+                    icon: 'none',
+                    duration: 2000
+                });
+                return false;
+            }
+            if (tenantInfo.returnTraffic == "" || tenantInfo.returnTraffic == null) {
+                wx.showToast({
+                    title: '请选择返京交通方式',
+                    icon: 'none',
+                    duration: 2000
+                });
+                return false;
+            }
+            if (tenantInfo.divideType == "" || tenantInfo.divideType == null) {
+                wx.showToast({
+                    title: '请选择隔离观察方式',
+                    icon: 'none',
+                    duration: 2000
+                });
+                return false;
+            }
+            if (tenantInfo.isSingleRoom == "" || tenantInfo.isSingleRoom == null) {
+                wx.showToast({
+                    title: '请选择是否单人单间',
+                    icon: 'none',
+                    duration: 2000
+                });
+                return false;
+            }
+        }
+
+
+
+
+        for (let key in tenantInfo){
+            if(objData.hasOwnProperty(key)){
+                tenantInfo[key] = objData[key];
+            }else{
+                 tenantInfo[key] =  tenantInfo[key];
+            }
+        }
+        // tenantInfo['addTime'] = new Date().getFullYear()+"-"+(~~new Date().getMonth()+1)+"-"+new Date().getDate();
+        this.setData({
+            tenantInfo
+        });
+
+        http(`/investigationController/addTenantInfo.act`,Object.assign({},this.data.tenantInfo,{'openid':appInst.globalData.openId}))
+        .then(res=>{
+            if(res.data.rtState){
+                wx.showToast({
+                    title:"保存成功",
+                    icon:"success",
+                    duration:2000,
+                    success(){
+                         wx.navigateBack();
+                    }
+                })
+            }
+        })
+    },
+    formReset: function () {
+        console.log('form发生了reset事件')
+    }
+})

@@ -1,0 +1,7 @@
+@import "./dist/common/index.wxss";/**app.wxss**/
+page,.container {
+    height: 100%;
+    width:100%;
+    box-sizing: border-box;
+    background-color: #f1f1f1;
+} 

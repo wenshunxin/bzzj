@@ -1,0 +1,203 @@
+<!--pages/roomer/roomer.wxml-->
+<!-- pages/tenant/tenant.wxml -->
+<view class="container">
+    <scroll-view scroll-y="{{true}}" class="scrollView">
+        <view class="main">
+        <form bindsubmit="formSubmit" bindreset="formReset">
+            <!-- 头部信息 -->
+            <view class="content">
+                <view class="title">个人基本信息</view>
+                <view class="item">
+                    <view>
+                        <text>姓名：</text>
+                        <image   class="" src="../../static/require.png" mode="aspectFit" lazy-load="false"></image>
+                    </view>
+                    <input type="text" name="landlordName" id="landlordName" value="{{landlordInfo.landlordName}}" placeholder="请输入姓名" />
+                </view>
+                <view class="item">
+                    <view>
+                        <text>性别：</text>
+                        <image   class="" src="../../static/require.png" mode="aspectFit" lazy-load="false"></image>
+                    </view>
+                    <radio-group class="radio-group" bindchange="radioChangeSex">
+                        <radio class="radio" style="display:inline-block;margin-right:20rpx;" color="#176CC1" wx:for-items="{{items1}}" checked="{{item.checked}}" wx:key="name" value="{{item.name}}">
+                            <view style="font-size:32rpx;">{{item.name}}</view>
+                        </radio>
+                    </radio-group>
+                </view>
+                <view class="item">
+                    <view>
+                        <text>手机号：</text>
+                        <image   class="" src="../../static/require.png" mode="aspectFit" lazy-load="false"></image>
+                    </view>
+                    <input type="number" name="mobile" id="mobile" value="{{landlordInfo.mobile}}"  placeholder="请输入手机号" maxlength="11"/>
+                </view>
+                <view class="item">
+                    <view>
+                        <text>证件类型：</text>
+                        <image   class="" src="../../static/require.png" mode="aspectFit" lazy-load="false"></image>
+                    </view>
+                    <radio-group class="radio-group" bindchange="radioChangeIdType">
+                        <radio class="radio" color="#176CC1" wx:for-items="{{items2}}" checked="{{item.checked}}" wx:key="name" value="{{item.name}}">
+                            <view>{{item.name}}</view>
+                        </radio>
+                    </radio-group>
+                </view>
+                <view class="item">
+                    <view>
+                        <text>证件号：</text>
+                        <image   class="" src="../../static/require.png" mode="aspectFit" lazy-load="false"></image>
+                    </view>
+                    <input name="idNumber" id="idNumber" value="{{landlordInfo.idNumber}}" type="text" placeholder="请输入证件号" />
+                </view>
+
+                <view class="item" style="display:flex;justify-content: space-between;align-items: center;">
+                    <view>
+                        <text>是否在村内居住：</text>
+                        <image   class="" src="../../static/require.png" mode="aspectFit" lazy-load="false"></image>
+                    </view>
+                    <van-checkbox value="{{  isIncommunity }}" checked-color="#176CC1" shape="square" bind:change="onChange">
+                        <!-- 在村内居住 -->
+                    </van-checkbox>
+                    <!-- <input name="idNumber" id="idNumber" value="{{landlordInfo.idNumber}}" type="text" placeholder="请输入证件号" /> -->
+                </view>
+
+
+                
+            </view>
+            
+            <view class="content">
+                <view class="title">出租房屋地址</view>
+                <view class="item">
+                    <view>
+                        <text>区：</text>
+                        <image class="" src="../../static/require.png" mode="aspectFit" lazy-load="false"></image>        
+                    </view>
+                    <picker class="picker" bindchange="bindPickerChange" value="{{areasIndex}}" range="{{areas}}"  range-key="areaName">
+                        <input type="text" name="" id="" disabled="{{true}}" value="{{areas[areasIndex].areaName}}" placeholder="请选择区" />
+                    </picker>
+                </view>
+                <view class="item">
+                    <view>
+                        <text>乡镇/街道：</text>
+                        <image class="" src="../../static/require.png" mode="aspectFit" lazy-load="false"></image>
+                    </view>
+                    <picker class="picker" bindchange="bindPickerChangeStreetName" value="{{streetNameIndex}}" range="{{streetName}}" range-key="streetName">
+                        <input type="text" name="" id="" disabled="{{true}}" value="{{streetName[streetNameIndex].streetName}}" placeholder="请选择区" />
+                    </picker>
+                </view>
+                <view class="item">
+                    <view>
+                        <text>村：</text>
+                        <image class="" src="../../static/require.png" mode="aspectFit" lazy-load="false"></image>  
+                    </view>
+                    <!-- <input name="community" id="community" value="{{tenantInfo.community}}" type="text" placeholder="请填写村" /> -->
+                    <picker class="picker" bindchange="bindPickerChangeCommunityName" value="{{communityNameIndex}}" range="{{communityName}}" range-key="communityName">
+                        <input type="text" name="" id="" disabled="{{true}}" value="{{communityName[communityNameIndex].communityName}}" placeholder="请选择区" />
+                    </picker>
+                </view>
+                <view class="item">
+                    <view>
+                        <text>详细地址（<text style="color:red;">有多个地址，用逗号分隔填写</text>）：</text>
+                        <image class="" src="../../static/require.png" mode="aspectFit" lazy-load="false"></image>
+                    </view>
+                    <textarea  name="detailAddress" id="detailAddress" value="{{landlordInfo.detailAddress}}" type="text" placeholder="请填写详细地址,多个地址用逗号隔开" ></textarea> 
+                </view>
+            </view>
+            <!-- 出租信息 -->
+            <view class="content">
+                <view class="title">出租信息</view>
+                <view class="item">
+                    <view >
+                        <text>可出租房屋（间）：</text>
+                        <image   class="" src="../../static/require.png" mode="aspectFit" lazy-load="false"></image>
+                    </view>
+                    <input name="leaseRoomNum" id="leaseRoomNum" type="number" value="{{landlordInfo.leaseRoomNum}}" placeholder="请输入可出租房屋间数"/>
+                </view>
+                <view class="item">
+                    <view>
+                        <text>可出租房屋面积（平方米）：</text>
+                        <image   class="" src="../../static/require.png" mode="aspectFit" lazy-load="false"></image>
+                    </view>
+                    <input name="leaseRoomSize" id="leaseRoomSize" type="digit" value="{{landlordInfo.leaseRoomSize}}" placeholder="请输入可出租房屋面积平方米" />
+                </view>
+
+
+                <view class="item">
+                    <view>
+                        <text>已出租户数：</text>
+                        <image class="" src="../../static/require.png" mode="aspectFit" lazy-load="false"></image>
+                    </view>
+                    <input name="rentedNums" id="rentedNums" type="number" value="{{landlordInfo.rentedNums}}" placeholder="请输入已出租户数" />
+                </view>
+
+
+                <view class="item">
+                    <view>
+                        <text>已租住人数：</text>
+                        <image class="" src="../../static/require.png" mode="aspectFit" lazy-load="false"></image>
+                    </view>
+                    <input name="rentedUserNums" id="rentedUserNums" type="number" value="{{landlordInfo.rentedUserNums}}" placeholder="请输入已租住人数" />
+                </view>
+                 
+            </view>
+
+
+
+            <view class="content">
+                <view class="title">其他家庭成员信息</view>
+                <view class="item">
+                    <view>配偶：
+                        
+                    </view>
+                    <input name="spouseName" id="spouseName" type="text" value="{{landlordInfo.spouseName}}"  placeholder="请填写配偶姓名" />
+                </view>
+                <view class="item">
+                    <view>手机号：
+                        
+                    </view>
+                    <input name="spouseMobile" id="spouseMobile" type="number" maxlength="11" value="{{landlordInfo.spouseMobile}}" placeholder="请填写手机号"  />
+                </view>
+                <view class="item">
+                    <view>二代身份证号：
+                      
+                    </view>
+                    <input name="spouseIdNumber" id="spouseIdNumber"  type="idcard" maxlength="18" value="{{landlordInfo.spouseIdNumber}}" placeholder="请填写二代身份证" />
+                </view>
+                <view class="item">
+                    <view>子女：
+                       
+                    </view>
+                    <input name="childrenNames" id="childrenNames" type="text" value="{{landlordInfo.childrenNames}}" placeholder="请填写子女姓名，多个逗号隔开" />
+                </view>
+                <view class="item">
+                    <view>二代身份证号：
+                        
+                    </view>
+                    <input name="chilrenIdNumbers" id="chilrenIdNumbers" value="{{landlordInfo.chilrenIdNumbers}}" type="text" placeholder="请填写二代身份证号，多个逗号隔开" />
+                </view>
+                <view class="item">
+                    <view>父母：
+                        
+                    </view>
+                    <input name="parentNames" id="parentNames" type="text" value="{{landlordInfo.parentNames}}" placeholder="请填写父母姓名，多个逗号隔开" />
+                </view>
+                <view class="item">
+                    <view>二代身份证号：
+                    </view>
+                    <input name="parentIdNumbers" id="parentIdNumbers" value="{{landlordInfo.parentIdNumbers}}" type="text" placeholder="请填写二代身份证号，多个逗号隔开" />
+                </view>
+
+
+                <view style="text-align:center;margin:30rpx 0;color:#fff;">
+                    <button type="default" size="mini" class="resetBtn" formType="reset" style="margin-right:20rpx;color:#333;font-size:28rpx;">重置</button>
+                     <button type="primary" size="mini" formType="submit"  style="background:#176CC1;color:#fff;font-size:28rpx;">上报</button>
+                </view>
+            </view>
+                <!-- <button formType="reset">重置</button>
+                <button formType="submit">提交</button> -->
+
+            </form>
+        </view>
+    </scroll-view>
+</view>

@@ -1,0 +1,11 @@
+/* pages/roomer/roomer.wxss */
+@import "../tenant/tenant";
+textarea{
+    height:180rpx;
+    border: 1px solid #f1f1f1;
+    border-radius: 10rpx;
+    line-height: 40rpx;
+    font-size: 28rpx;
+    text-indent: 10rpx;
+    width:100%;
+}

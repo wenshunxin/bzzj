@@ -1,0 +1,17 @@
+/* pages/healthy/healthy.wxss */
+
+@import "../tenant/tenant";
+.title{
+    padding:10rpx 0 10rpx 10rpx;
+    box-sizing: border-box;
+    background: rgba(23,108,193,.6);
+    margin:10rpx 0;
+    color: #fff;
+}
+.content{
+    padding: 0;
+}
+.content .item{
+    padding: 10rpx 10rpx;
+    box-sizing: border-box;
+}

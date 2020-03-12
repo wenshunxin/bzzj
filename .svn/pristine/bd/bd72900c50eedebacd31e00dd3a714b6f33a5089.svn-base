@@ -1,0 +1,137 @@
+<!--pages/demo/demo.wxml-->
+
+<view class="flexDiv">
+    <view >其他家庭成员信息 </view>
+    <button size="mini" bindtap="hanldeAdd">+</button>
+</view>
+
+<view wx:if="{{isfalg1}}">
+        <picker class="" range="{{list}}" data-index="{{index}}" vlaue="{{demoIndex}}" bindchange="bindPickerChange">
+        <view class="">{{list[demoIndex]}}</view>
+    </picker>
+    <view wx:if="{{ list[demoIndex] == '配偶' }}">
+        <view class="item">
+            <view>姓名:</view>
+            <input type="text" placeholder="填写配偶姓名" />
+        </view>
+        <view class="item">
+            <view>手机号:</view>
+            <input type="text" placeholder="填写配偶手机号" />
+        </view>
+        <view class="item">
+            <view>二代身份证号:</view>
+            <input type="text" placeholder="填写配偶二代身份证号" />
+        </view>
+    </view>
+    <view wx:if="{{list[demoIndex] == '子女'}}">
+        <view class="item">
+            <view>姓名:</view>
+            <input type="text" placeholder="填写子女姓名，多个逗号隔开" />
+        </view>
+        <view class="item">
+            <view>二代身份证号:</view>
+            <input type="text" placeholder="填写子女二代身份证号，多个逗号隔开" />
+        </view>
+    </view>
+    <view wx:if="{{list[demoIndex] == '父母' }}">
+        <view class="item">
+            <view>姓名:</view>
+            <input type="text" placeholder="填写父母姓名，多个逗号隔开" />
+        </view>
+        <view class="item">
+            <view>二代身份证号:</view>
+            <input type="text" placeholder="填写子女二代身份证号，多个逗号隔开" />
+        </view>
+    </view>
+
+
+
+</view>
+<view wx:if="{{isfalg2}}">
+
+    <picker class="" range="{{list1}}" data-index="{{index}}" vlaue="{{demoIndex1}}" bindchange="bindPickerChange1">
+        <view class="">{{list1[demoIndex1]}}</view>
+    </picker>
+    <view wx:if="{{ list1[demoIndex1] == '配偶' }}">
+        <view class="item">
+            <view>姓名:</view>
+            <input type="text" placeholder="填写配偶姓名" />
+        </view>
+        <view class="item">
+            <view>手机号:</view>
+            <input type="text" placeholder="填写配偶手机号" />
+        </view>
+        <view class="item">
+            <view>二代身份证号:</view>
+            <input type="text" placeholder="填写配偶二代身份证号" />
+        </view>
+    </view>
+    <view wx:if="{{list1[demoIndex1] == '子女'}}">
+        <view class="item">
+            <view>姓名:</view>
+            <input type="text" placeholder="填写子女姓名，多个逗号隔开" />
+        </view>
+        <view class="item">
+            <view>二代身份证号:</view>
+            <input type="text" placeholder="填写子女二代身份证号，多个逗号隔开" />
+        </view>
+    </view>
+    <view wx:if="{{list1[demoIndex1] == '父母' }}">
+        <view class="item">
+            <view>姓名:</view>
+            <input type="text" placeholder="填写父母姓名，多个逗号隔开" />
+        </view>
+        <view class="item">
+            <view>二代身份证号:</view>
+            <input type="text" placeholder="填写子女二代身份证号，多个逗号隔开" />
+        </view>
+    </view>
+</view>
+
+
+
+<view wx:if="{{isfalg3}}">3</view>
+
+
+
+<!-- <view wx:for="{{listData}}" wx:key="name">
+    <picker class=""   range="{{item.list}}" data-index="{{index}}"   vlaue="{{item.demoIndex}}"    bindchange="bindPickerChange">
+        <view class="">{{item.list[item.demoIndex]}}</view>
+    </picker>
+    <view wx:if="{{ item.list[item.demoIndex] == '配偶' }}">
+        <view class="item">
+             <view>姓名:</view>
+             <input type="text" placeholder="填写配偶姓名"/>
+         </view>
+        <view class="item">
+              <view>手机号:</view>
+              <input type="text"  placeholder="填写配偶手机号"/>
+        </view>
+         <view class="item">
+        <view>二代身份证号:</view>
+               <input type="text"  placeholder="填写配偶二代身份证号"/>
+        </view>
+    </view>
+    <view wx:if="{{item.list[item.demoIndex] == '子女'}}">
+        <view class="item">
+            <view>姓名:</view>
+            <input type="text" placeholder="填写子女姓名，多个逗号隔开"/>
+        </view>
+        <view class="item">
+            <view>二代身份证号:</view>
+            <input type="text"  placeholder="填写子女二代身份证号，多个逗号隔开"/>
+        </view>
+    </view>
+    <view wx:if="{{item.list[item.demoIndex] == '父母' }}">
+        <view class="item">
+            <view>姓名:</view>
+            <input type="text"  placeholder="填写父母姓名，多个逗号隔开"/>
+        </view>
+        <view class="item">
+            <view>二代身份证号:</view>
+            <input type="text"  placeholder="填写子女二代身份证号，多个逗号隔开"/>
+        </view>
+    </view>
+</view> -->
+
+

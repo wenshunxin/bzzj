@@ -1,0 +1,20 @@
+{
+	"pages": [ 
+        "pages/index/index",
+        "pages/tenantIndex/tenantIndex",
+        "pages/roomIndex/roomIndex",
+        "pages/tenant/tenant",
+        "pages/roomer/roomer",
+        "pages/healthy/healthy",
+        "pages/tenantinfo/tenantinfo",
+        "pages/demo/demo"
+    ],
+	"window": {
+		"backgroundTextStyle": "light",
+		"navigationBarBackgroundColor": "#176CC1",
+		"navigationBarTitleText": "北藏之家温馨港湾人员信息填报系统",
+		"navigationBarTextStyle": "white"
+	},
+	"style": "v2",
+	"sitemapLocation": "sitemap.json"
+}

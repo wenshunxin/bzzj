@@ -1,0 +1,17 @@
+/* pages/tenantinfo/tenantinfo.wxss */
+@import "../tenant/tenant";
+.tenantInfo{
+    padding: 20rpx;
+    box-sizing: border-box;
+}
+.tenantInfo .item view:last-child{
+    border-bottom: 1px solid #f1f1f1;
+    height:80rpx;
+    line-height: 80rpx;
+}
+.noData{
+    text-align:center;
+    font-size:36rpx;
+    color:#333;
+    margin-top:120rpx;
+}
