@@ -4,25 +4,6 @@
         <view class="main">
             <form bindsubmit="formSubmit" bindreset="formReset">
             <view class="content">
-
-                <view class="title">个人信息</view>
-                <view class="item">
-                    <view>
-                        <text>姓名：</text>
-                        <image class="" src="../../static/require.png" mode="aspectFit" lazy-load="false"></image>
-                    </view>
-                    <picker class="picker" bindchange="bindPickerChangeName" value="{{nameIndex}}" range="{{nameList}}" range-key="userName">
-                         <input type="text" disabled="{{true}}" value="{{nameList[nameIndex].userName}}" placeholder="请选择姓名" />
-                     </picker>
-                    <!-- <input name="userName" id="userName" value="{{userName}}" disabled="{{true}}" type="text" placeholder="请填写个人姓名" /> -->
-                </view>
-                <view class="item">
-                    <view>
-                        <text>电话：</text>
-                        <image class="" src="../../static/require.png" mode="aspectFit" lazy-load="false"></image>
-                    </view>
-                    <input name="userMobile" id="userMobile" maxlength="11" value="{{nameList[nameIndex].mobile}}" disabled="{{true}}" type="number" placeholder="请填写个人电话" />
-                </view>
                 <view class="item">
                     <view >
                         <text>打卡时间：</text>
@@ -32,9 +13,7 @@
                         <input type="text" name="startDate" value="{{startDate}}" name="" id=""  disabled="{{true}}"/>
                     </picker>
                 </view>
-
-                
-
+ 
                 <view class="title">每次情况</view>
                 <view class="item">
                     <view >
@@ -109,7 +88,21 @@
                    </radio-group>
                 </view>
 
-                
+                <view class="title">个人信息</view>
+                <view class="item">
+                    <view>
+                        <text>姓名：</text>
+                        <image class="" src="../../static/require.png" mode="aspectFit" lazy-load="false"></image>
+                    </view>
+                    <input name="userName" id="userName" value="{{userName}}" disabled="{{true}}" type="text" placeholder="请填写个人姓名" />
+                </view>
+                <view class="item">
+                    <view>
+                        <text>电话：</text>
+                        <image class="" src="../../static/require.png" mode="aspectFit" lazy-load="false"></image>
+                    </view>
+                    <input name="userMobile" id="userMobile" maxlength="11" value="{{userMobile}}" disabled="{{true}}" type="number" placeholder="请填写个人电话" />
+                </view>
 
 
                  <view style="text-align:center;margin:50rpx 0 30rpx;color:#fff;padding-bottom:60rpx;">

@@ -59,22 +59,42 @@ Page({
         areasIndex:0,
         streetNameIndex:0,
         communityNameIndex:0,
-
-
-        // 身份证选择 数据回显
-        idNumberIndex: 0,
-        idNumberList: []
     },
 
     onLoad(){
-        let fn4 = this.handleGetAllTenantInfoByOpenid();;
+        let fn4 = this.handleGetData();
         let fn1 = this.handleGetAreaList();
         Promise.all([fn4,fn1 ]).then((res)=>{
-            this.handleSetData();
+            const { landlordInfo, items1, items2 } = this.data;
+            const { sex, idType, area, street, community, isIncommunity } = landlordInfo;
+            for(let i=0;i<items1.length;i++){
+                if(items1[i].name == sex){
+                    items1[i].checked = true;
+                }else{
+                    items1[i].checked = false;
+                }
+            }
+            for(let i=0;i<items2.length;i++){
+                if(items2[i].name == idType){
+                    items2[i].checked = true;
+                }else{
+                    items2[i].checked = false;
+                }
+            };
+            let index = 0;
+            if (area != ""){
+                index = this.data.areas.findIndex(item => item.areaName == area);
+            }
+            // let isIncommunityflag = isIncommunity == "是"?true:false;
+            this.setData({
+                items1,
+                items2,
+                areasIndex:index,
+                isIncommunity
+            });
         })
         
         this.initValidate();
-        
     },
 
     initValidate() {
@@ -100,51 +120,6 @@ Page({
         //实例化当前的验证规则和提示消息
         this.WxValidate = new WxValidate(rules, message);
     },
-    handleSetData(){
-        const { landlordInfo, items1, items2 } = this.data;
-        const { sex, idType, area, street, community, isIncommunity } = landlordInfo;
-
-        items1.forEach(item=>{
-            item['checked'] = false;
-        });
-
-        let items1Index = items1.findIndex(item=>item.name == sex);
-        items1[items1Index].checked = true;
-
-        items2.forEach(item => {
-            item['checked'] = false;
-        });
-
-        let items2Index = items2.findIndex(item => item.name == idType);
-        items2[items2Index].checked = true;
-
-
-        // for (let i = 0; i < items1.length; i++) {
-        //     if (items1[i].name == sex) {
-        //         items1[i].checked = true;
-        //     } else {
-        //         items1[i].checked = false;
-        //     }
-        // }
-        // for (let i = 0; i < items2.length; i++) {
-        //     if (items2[i].name == idType) {
-        //         items2[i].checked = true;
-        //     } else {
-        //         items2[i].checked = false;
-        //     }
-        // };
-        let index = 0;
-        if (area != "") {
-            index = this.data.areas.findIndex(item => item.areaName == area);
-        }
-        // let isIncommunityflag = isIncommunity == "是"?true:false;
-        this.setData({
-            items1,
-            items2,
-            areasIndex: index,
-            isIncommunity
-        });
-    },
     // 根据openid 数据回显
     handleGetData(){
         return new Promise((resolve,reject)=>{
@@ -162,47 +137,6 @@ Page({
                     });
                     resolve()
                 }
-            })
-        })
-    },
-
-
-    // 身份证选择
-    handleGetAllTenantInfoByOpenid(){
-        return new Promise((resolve,reject)=>{
-            http(`/investigationController/getAllLandlordInfoByOpenid.act?openid=${appInst.globalData.openId}`)
-                .then(res => {
-                    if (res.data.rtState && res.data.rtData.length) {
-                        this.setData({
-                            idNumberList: res.data.rtData
-                        }, () => {
-                            const { idNumberList} = this.data;
-                            this.setData({
-                                landlordInfo: idNumberList[0]
-                            },()=>{
-                                const { landlordInfo} = this.data;
-                                this.handleGetStreetList(landlordInfo.area);
-                                this.handleGetCommunityList(landlordInfo.area, landlordInfo.street);
-                                resolve();
-                            })
-                        })
-                    }
-                })
-        })
-        
-    },
-    bindPickerChangeIdNumber(e){
-        this.setData({
-            idNumberIndex:e.detail.value
-        },()=>{
-            const { idNumberList, idNumberIndex} = this.data;
-            this.setData({
-                landlordInfo: idNumberList[idNumberIndex]
-            },()=>{
-                const { landlordInfo } = this.data;
-                this.handleSetData();
-                this.handleGetStreetList(landlordInfo.area);
-                this.handleGetCommunityList(landlordInfo.area, landlordInfo.street)
             })
         })
     },
@@ -326,7 +260,7 @@ Page({
     onChange(e){
         this.setData({
             isIncommunity:e.detail,
-            "landlordInfo.isIncommunity": e.detail
+            "landlordInfo.isIncommunity": e.detail?"是":"否"
         })
     },
 
@@ -575,9 +509,7 @@ Page({
         // console.log(landlordInfo);
 
         wx.setStorageSync("landlordInfo",JSON.parse(JSON.stringify(landlordInfo)))
-        delete landlordInfo['addTime'];
-        delete landlordInfo['sid'];
-        delete landlordInfo['tenantList'];
+
         // landlordInfo['addTime'] = new Date().getFullYear() + "-" + new Date().getMonth() + 1 + "-" + new Date().getDay();
         this.setData({
             landlordInfo

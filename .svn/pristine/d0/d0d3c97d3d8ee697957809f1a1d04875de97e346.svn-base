@@ -3,80 +3,6 @@
     <scroll-view scroll-y="{{true}}" class="scrollView">
         <view class="main">
         <form bindsubmit="formSubmit" bindreset="formReset">
-               
-            <view class="content">
-
-                <view class="item" wx:if="{{idNumberList.length != 0}}">
-                     <view>
-                         <text>身份证号：</text>
-                         <!-- <image class="" src="../../static/require.png" mode="aspectFit" lazy-load="false"></image> -->
-                     </view>
-                     <picker class="picker" bindchange="bindPickerChangeIdNumber" value="{{idNumberIndex}}" range="{{idNumberList}}" range-key="idNumber">
-                         <input type="text" disabled="{{true}}" value="{{idNumberList[idNumberIndex].idNumber}}" placeholder="请选择身份证号" />
-                     </picker>
-                 </view>
-                <view class="title">个人基本信息</view>
-                <view class="item">
-                    <view>
-                        <text>姓名</text>
-                        ：
-                        <image class="" src="../../static/require.png" mode="aspectFit" lazy-load="false"></image>
-                    </view>
-                    <input value="{{tenantInfo.userName}}" name="userName" id="userName" type="text" placeholder="请输入姓名" />
-                </view>
-                <view class="item">
-                    <view>
-                        <text>证件类型：</text>
-                        <image class="" src="../../static/require.png" mode="aspectFit" lazy-load="false"></image>
-                    </view>
-                    <radio-group class="radio-group" bindchange="radioChangeIdType">
-                        <radio class="radio" color="#176CC1" wx:for-items="{{items2}}" wx:key="name" checked="{{item.checked}}" value="{{item.name}}">
-                            <view>{{item.name}}</view>
-                        </radio>
-                    </radio-group>
-                </view>
-                <view class="item">
-                    <view>
-                        <text>证件号：</text>
-                        <image class="" src="../../static/require.png" mode="aspectFit" lazy-load="false"></image>
-                    </view>
-                    <input name="idNumber" id="idNumber" value="{{tenantInfo.idNumber}}" type="text" maxlength="50" placeholder="请输入证件号" />
-                </view>
-                <view class="item">
-                    <view>
-                        <text>性别：</text>
-                        <image class="" src="../../static/require.png" mode="aspectFit" lazy-load="false"></image>
-                    </view>
-                    <radio-group class="radio-group" bindchange="radioChangeSex">
-                        <radio class="radio" style="display:inline-block;margin-right:20rpx;" color="#176CC1" wx:for-items="{{items1}}" checked="{{item.checked}}" wx:key="name" value="{{item.name}}">
-                            <view style="font-size:32rpx;">{{item.name}}</view>
-                        </radio>
-                    </radio-group>
-                </view>
-                <view class="item">
-                    <view>
-                        <text>手机号：</text>
-                        <image class="" src="../../static/require.png" mode="aspectFit" lazy-load="false"></image>
-                    </view>
-                    <input type="number" name="mobile" id="mobile" value="{{tenantInfo.mobile}}" placeholder="请输入手机号" maxlength="11" />
-                </view>
-                
-                <view class="item">
-                    <view>
-                        <text>从事工作：</text>
-                        <image class="" src="../../static/require.png" mode="aspectFit" lazy-load="false"></image>
-                    </view>
-                    <input type="text" name='workName' id="workName" value="{{tenantInfo.workName}}" placeholder="请输入从事工作，无具体工作填写无业" />
-                </view>
-                <view class="item">
-                    <view>
-                        <text>工作单位：</text>
-                        <image class="" src="../../static/require.png" mode="aspectFit" lazy-load="false"></image>
-                    </view>
-                    <input name="workCompany" id="workCompany" value="{{tenantInfo.workCompany}}" type="text" placeholder="请填写工作单位，如没有填写无" />
-                </view>
-            </view>
-
             <!-- 头部信息 -->
             <view class="content">
                 <view class="title">离返京情况</view>
@@ -109,7 +35,6 @@
                         <input type="text" name="returnDate" id="returnDate"  value="{{ tenantInfo.returnDate }}" placeholder="请输入返京日期" disabled='true' />
                     </picker>
                 </view>
-
                 <view class="item">
                     <view>
                         <text>预计返京时间：</text>
@@ -120,7 +45,66 @@
                     </picker>
                 </view>
             </view>
-            
+            <view class="content">
+                <view class="title">个人基本信息</view>
+                <view class="item">
+                    <view>
+                        <text >姓名</text>：
+                        <image class="" src="../../static/require.png" mode="aspectFit" lazy-load="false"></image>
+                    </view>
+                    <input value="{{tenantInfo.userName}}" name="userName" id="userName" type="text" placeholder="请输入姓名" />
+                </view>
+                <view class="item">
+                    <view>
+                        <text >性别：</text>
+                        <image class="" src="../../static/require.png" mode="aspectFit" lazy-load="false"></image>
+                    </view>
+                    <radio-group class="radio-group"  bindchange="radioChangeSex">
+                        <radio class="radio" style="display:inline-block;margin-right:20rpx;"    color="#176CC1" wx:for-items="{{items1}}" checked="{{item.checked}}" wx:key="name" value="{{item.name}}">
+                            <view style="font-size:32rpx;">{{item.name}}</view>
+                        </radio>
+                    </radio-group>
+                </view>
+                <view class="item">
+                    <view>
+                        <text>手机号：</text>
+                        <image class="" src="../../static/require.png" mode="aspectFit" lazy-load="false"></image>
+                    </view>
+                    <input type="number" name="mobile" id="mobile" value="{{tenantInfo.mobile}}" placeholder="请输入手机号" maxlength="11"/>
+                </view>
+                <view class="item">
+                    <view>
+                        <text >证件类型：</text>
+                        <image class="" src="../../static/require.png" mode="aspectFit" lazy-load="false"></image>
+                    </view>
+                    <radio-group class="radio-group"  bindchange="radioChangeIdType">
+                        <radio class="radio" color="#176CC1"   wx:for-items="{{items2}}" wx:key="name" checked="{{item.checked}}" value="{{item.name}}">
+                            <view>{{item.name}}</view>
+                        </radio>
+                    </radio-group>
+                </view>
+                <view class="item">
+                    <view>
+                        <text >证件号：</text>
+                        <image class="" src="../../static/require.png" mode="aspectFit" lazy-load="false"></image>        
+                    </view>
+                    <input name="idNumber" id="idNumber" value="{{tenantInfo.idNumber}}" type="text" placeholder="请输入证件号"/>
+                </view>
+                <view class="item">
+                    <view>
+                        <text >从事工作：</text>
+                        <image class="" src="../../static/require.png" mode="aspectFit" lazy-load="false"></image>
+                    </view>
+                    <input type="text" name='workName' id="workName" value="{{tenantInfo.workName}}" placeholder="请输入从事工作，无具体工作填写无业"/>
+                </view>
+                <view class="item">
+                    <view>
+                        <text >工作单位：</text>
+                        <image class="" src="../../static/require.png" mode="aspectFit" lazy-load="false"></image>                  
+                    </view>
+                    <input name="workCompany" id="workCompany" value="{{tenantInfo.workCompany}}" type="text" placeholder="请填写工作单位，如没有填写无"/>
+                </view>
+            </view>
 
             <!-- 在京居住地址 -->
             <view class="content">
@@ -168,10 +152,10 @@
                 <view class="item">
                     <view>
                         <text>省：</text>
-                        <image wx:if="{{!returnBeforeBjAddressDisabled}}" class="" src="../../static/require.png" mode="aspectFit" lazy-load="false"></image>
+                        <image wx:if="{{!(pickDisabled2 && pickDisabled1 && pickDisabled)}}" class="" src="../../static/require.png" mode="aspectFit" lazy-load="false"></image>
                     </view>
 
-                    <picker class="picker {{returnBeforeBjAddressDisabled?'pickDisabled':''}}" bindchange="bindPickerChangeProvince" disabled="{{returnBeforeBjAddressDisabled}}" value="{{provinceListIndex}}" range="{{provinceList}}" range-key="cityFullName">
+                    <picker class="picker {{pickDisabled2 && pickDisabled1 && pickDisabled?'pickDisabled':''}}" bindchange="bindPickerChangeProvince" disabled="{{pickDisabled2 && pickDisabled1 && pickDisabled}}" value="{{provinceListIndex}}" range="{{provinceList}}" range-key="cityFullName">
                          <input type="text"  disabled="{{true}}" value="{{provinceList[provinceListIndex].cityFullName}}" placeholder="请选择省份" />
                      </picker>
 
@@ -180,34 +164,34 @@
                 <view class="item">
                     <view>
                         <text>地级市：</text>
-                        <image wx:if="{{!returnBeforeBjAddressDisabled}}" class="" src="../../static/require.png" mode="aspectFit" lazy-load="false"></image>
+                        <image wx:if="{{!(pickDisabled2 && pickDisabled1 && pickDisabled)}}" class="" src="../../static/require.png" mode="aspectFit" lazy-load="false"></image>
                     </view>
-                    <picker class="picker {{returnBeforeBjAddressDisabled?'pickDisabled':''}}" bindchange="bindPickerChangeCityList"  disabled="{{returnBeforeBjAddressDisabled}}" value="{{cityListIndex}}" range="{{cityList}}" range-key="cityFullName">
+                    <picker class="picker {{pickDisabled2 && pickDisabled1 && pickDisabled?'pickDisabled':''}}" bindchange="bindPickerChangeCityList"  disabled="{{pickDisabled2 && pickDisabled1 && pickDisabled}}" value="{{cityListIndex}}" range="{{cityList}}" range-key="cityFullName">
                         <input type="text"  disabled="{{true}}" value="{{cityList[cityListIndex].cityFullName}}" placeholder="请选择市" />
                     </picker>
                 </view>
                 <view class="item">
                     <view>
                         <text>县/区：</text>
-                        <image wx:if="{{!returnBeforeBjAddressDisabled}}" class="" src="../../static/require.png" mode="aspectFit" lazy-load="false"></image>
+                        <image wx:if="{{!(pickDisabled2 && pickDisabled1 && pickDisabled)}}" class="" src="../../static/require.png" mode="aspectFit" lazy-load="false"></image>
                     </view>
-                    <picker class="picker {{returnBeforeBjAddressDisabled?'pickDisabled':''}}" bindchange="bindPickerChangeCountyList"  disabled="{{returnBeforeBjAddressDisabled}}" value="{{countyListIndex}}" range="{{countyList}}" range-key="cityFullName">
+                    <picker class="picker {{pickDisabled2 && pickDisabled1 && pickDisabled?'pickDisabled':''}}" bindchange="bindPickerChangeCountyList"  disabled="{{pickDisabled2 && pickDisabled1 && pickDisabled}}" value="{{countyListIndex}}" range="{{countyList}}" range-key="cityFullName">
                         <input type="text"  disabled="{{true}}" value="{{countyList[countyListIndex].cityFullName}}" placeholder="请选择县/区" />
                     </picker>
                 </view>
                 <view class="item">
                     <view>
                          <text>乡镇/街道：</text>
-                        <image wx:if="{{!returnBeforeBjAddressDisabled}}" class="" src="../../static/require.png" mode="aspectFit" lazy-load="false"></image>
+                        <image wx:if="{{!(pickDisabled2 && pickDisabled1 && pickDisabled)}}" class="" src="../../static/require.png" mode="aspectFit" lazy-load="false"></image>
                     </view>
-                    <input name="returnStreet" id="returnStreet" class="picker {{returnBeforeBjAddressDisabled?'pickDisabled':''}}" disabled="{{returnBeforeBjAddressDisabled}}" value="{{tenantInfo.returnStreet}}" type="text" placeholder="请填写乡镇/街道" />
+                    <input name="returnStreet" id="returnStreet" class="picker {{pickDisabled2 && pickDisabled1 && pickDisabled?'pickDisabled':''}}" disabled="{{pickDisabled2 && pickDisabled1 && pickDisabled}}" value="{{tenantInfo.returnStreet}}" type="text" placeholder="请填写乡镇/街道" />
                 </view>
                 <view class="item">
                     <view>
                          <text>具体地址：</text>
-                        <image wx:if="{{!returnBeforeBjAddressDisabled}}" class="" src="../../static/require.png" mode="aspectFit" lazy-load="false"></image>
+                        <image wx:if="{{!(pickDisabled2 && pickDisabled1 && pickDisabled)}}" class="" src="../../static/require.png" mode="aspectFit" lazy-load="false"></image>
                     </view>
-                    <input name="returnDetailAddress" class="picker {{returnBeforeBjAddressDisabled?'pickDisabled':''}}" id="returnDetailAddress" disabled="{{returnBeforeBjAddressDisabled}}" value="{{tenantInfo.returnDetailAddress}}" type="text"  placeholder="请填写具体地址" />
+                    <input name="returnDetailAddress" class="picker {{pickDisabled2 && pickDisabled1 && pickDisabled?'pickDisabled':''}}" id="returnDetailAddress" disabled="{{pickDisabled2 && pickDisabled1 && pickDisabled}}" value="{{tenantInfo.returnDetailAddress}}" type="text"  placeholder="请填写具体地址" />
                 </view>
             </view>
             <!--  在京其他家庭成员 -->
@@ -310,20 +294,20 @@
                 <view class="item">
                     <view>
                         <text >房东姓名：</text>
-                        <image wx:if="{{!landlordDisabled}}" class="" src="../../static/require.png" mode="aspectFit" lazy-load="false"></image>
+                        <image class="" src="../../static/require.png" mode="aspectFit" lazy-load="false"></image>
                     </view>
-                    <input disabled="{{landlordDisabled}}" class="{{landlordDisabled?'pickDisabled':''}}" name="landlordName" id="landlordName" value="{{tenantInfo.landlordName}}" type="text" placeholder="请填写房东姓名"/>
+                    <input name="landlordName" id="landlordName" value="{{tenantInfo.landlordName}}" type="text" placeholder="请填写房东姓名"/>
                 </view>
                 <view class="item">
                     <view>
                         <text>手机号：</text>
-                        <image  wx:if="{{!landlordDisabled}}"  class="" src="../../static/require.png" mode="aspectFit" lazy-load="false"></image>
+                        <image   class="" src="../../static/require.png" mode="aspectFit" lazy-load="false"></image>
                     </view>
-                    <input type="number" name="landlordMobile" id="landlordMobile" disabled="{{landlordDisabled}}" class="{{landlordDisabled?'pickDisabled':''}}" value="{{tenantInfo.landlordMobile}}" placeholder="请填写手机号" maxlength="11"/>
+                    <input type="number" name="landlordMobile" id="landlordMobile" value="{{tenantInfo.landlordMobile}}" placeholder="请填写手机号" maxlength="11"/>
                 </view>
                 <view class="item">
                     <view>微信号：</view>
-                    <input name="landlordWeixin" id="landlordWeixin" disabled="{{landlordDisabled}}" class="{{landlordDisabled?'pickDisabled':''}}" value="{{tenantInfo.landlordWeixin}}" type="text" placeholder="请填写微信号"/>
+                    <input name="landlordWeixin" id="landlordWeixin" value="{{tenantInfo.landlordWeixin}}" type="text" placeholder="请填写微信号"/>
                 </view>
             </view>
             
@@ -333,10 +317,10 @@
                 <view class="item">
                     <view >
                         <text>与疫区关系：</text>
-                        <image wx:if="{{!epidemicRelatedDisabled}}" class="" src="../../static/require.png" mode="aspectFit" lazy-load="false"></image>
+                        <image wx:if="{{!pickDisabled1}}" class="" src="../../static/require.png" mode="aspectFit" lazy-load="false"></image>
                     </view>
                     <radio-group class="radio-group" bindchange="radioChangeRelation">
-                        <radio  disabled="{{epidemicRelatedDisabled}}"  class="radio" color="#176CC1" wx:for-items="{{items3}}" wx:key="name" value="{{item.name}}" checked="{{item.checked}}">
+                        <radio  disabled="{{pickDisabled || !pickDisabled2}}"  class="radio" color="#176CC1" wx:for-items="{{items3}}" wx:key="name" value="{{item.name}}" checked="{{item.checked}}">
                             <view style="width:320px;">{{item.name}}</view>
                         </radio>
                     </radio-group>
@@ -344,10 +328,10 @@
                 <view class="item">
                     <view >
                         <text>返京交通方式：</text>
-                        <image  wx:if="{{!epidemicRelatedDisabled}}" class="" src="../../static/require.png" mode="aspectFit" lazy-load="false"></image>
+                        <image  wx:if="{{!pickDisabled1}}" class="" src="../../static/require.png" mode="aspectFit" lazy-load="false"></image>
                     </view>
                     <radio-group class="radio-group" bindchange="radioChangeReturnTraffic">
-                        <radio  disabled="{{epidemicRelatedDisabled}}"  class="radio" color="#176CC1" style="display:inline-block;margin:10rpx 20rpx 10rpx 0;" wx:for-items="{{items4}}" checked="{{item.checked}}" wx:key="name" value="{{item.name}}">
+                        <radio  disabled="{{pickDisabled || !pickDisabled2}}"  class="radio" color="#176CC1" style="display:inline-block;margin:10rpx 20rpx 10rpx 0;" wx:for-items="{{items4}}" checked="{{item.checked}}" wx:key="name" value="{{item.name}}">
                             <view >{{item.name}}</view>
                         </radio>
                     </radio-group>
@@ -355,10 +339,10 @@
                 <view class="item">
                     <view>
                         <text>隔离观察方式：</text>
-                        <image  wx:if="{{!epidemicRelatedDisabled}}" class="" src="../../static/require.png" mode="aspectFit" lazy-load="false"></image>
+                        <image  wx:if="{{!pickDisabled1}}" class="" src="../../static/require.png" mode="aspectFit" lazy-load="false"></image>
                     </view>
                     <radio-group class="radio-group" bindchange="radioChangeDivideType">
-                        <radio  disabled="{{epidemicRelatedDisabled}}"  class="radio" color="#176CC1" style="display:inline-block;margin:10rpx 20rpx 10rpx 0;" wx:for-items="{{items5}}" wx:key="name" value="{{item.name}}"  checked="{{item.checked}}">
+                        <radio  disabled="{{pickDisabled || !pickDisabled2}}"  class="radio" color="#176CC1" style="display:inline-block;margin:10rpx 20rpx 10rpx 0;" wx:for-items="{{items5}}" wx:key="name" value="{{item.name}}"  checked="{{item.checked}}">
                             <view>{{item.name}}</view>
                         </radio>
                     </radio-group>
@@ -366,10 +350,10 @@
                 <view class="item">
                     <view>
                         <text>是否单人单间：</text>
-                        <image  wx:if="{{!epidemicRelatedDisabled}}" class="" src="../../static/require.png" mode="aspectFit" lazy-load="false"></image>
+                        <image  wx:if="{{!pickDisabled1}}" class="" src="../../static/require.png" mode="aspectFit" lazy-load="false"></image>
                     </view>
                     <radio-group class="radio-group" bindchange="radioChangeIsSingleRoom">
-                        <radio disabled="{{epidemicRelatedDisabled}}"  class="radio" color="#176CC1" style="display:inline-block;margin:10rpx 20rpx 10rpx 0;" wx:for-items="{{items6}}" wx:key="name" value="{{item.name}}" checked="{{item.checked}}">
+                        <radio disabled="{{pickDisabled || !pickDisabled2}}"  class="radio" color="#176CC1" style="display:inline-block;margin:10rpx 20rpx 10rpx 0;" wx:for-items="{{items6}}" wx:key="name" value="{{item.name}}" checked="{{item.checked}}">
                             <view>{{item.name}}</view>
                         </radio>
                     </radio-group>

@@ -10,8 +10,7 @@ Page({
         items: [
             { name: "离京未返京", checked: false },
             { name: "离京已返京", checked: false },
-            { name: "未离京", checked: false },
-            { name: "已搬离北京",checked:false}
+            { name: "未离京", checked: false }
         ],
         items1: [
             { name: "男", checked: false },
@@ -88,25 +87,18 @@ Page({
             isSingleRoom: "",
             addTime: ""
         },
-
-
         provinceList: [],
         provinceListIndex: 0,
         cityList: [],
         cityListIndex: 0,
         countyList: [],
-        countyListIndex: 0,
-        returnBeforeBjAddressDisabled:false,
-
-        // 身份证选择 数据回显
-        idNumberIndex:0,
-        idNumberList:[],
-
-        // 与疫情有关的disabled 
-        epidemicRelatedDisabled:true,
-        // 房东信息不可填写
-        landlordDisabled:false
+        countyListIndex: 0
     },
+
+
+
+
+
 
     onChange(e) {
         const { tenantInfo } = this.data;
@@ -136,133 +128,116 @@ Page({
     onLoad(options) {
         let fn1 = this.handleGetAreaList();
         let fn2 = this.handleGetProvinceList();
-        let fn3 = this.handleGetAllTenantInfoByOpenid();
+        let fn3 = this.handleGetTenantInfoByOpenid();
 
-        Promise.all([fn3,fn1.fn2 ]).then(res => {
+        Promise.all([fn1.fn2, fn3]).then(res => {
             this.setData({
-                tenantInfo: res[0]
+                tenantInfo: res[1]
             }, () => {
-                this.handleSetData();
-                this.handleGetProvinceList();
-                this.handleGetAreaList();
+                const { tenantInfo, items, items1, items2, provinceList, areas, items3, items4, items5, items6 } = this.data;
+                const {
+                    inStatus,
+                    sex,
+                    idType,
+                    area,
+                    spouseName,
+                    spouseMobile,
+                    spouseIdNumber,
+                    childrenNames,
+                    childrenIdNumbers,
+                    parentNames,
+                    parentIdNumbers,
+                    relation,
+                    returnTraffic,
+                    divideType,
+                    isSingleRoom,
+                    returnProvince
+                } = tenantInfo;
+                // 在京状态数据回显
+                let inStatusText = items.findIndex(item => item.name == inStatus);
+                this.radioChange({ detail: { value: inStatus } })
+                items[inStatusText].checked = true;
+                // 男女数据回显
+                let sexIndex = items1.findIndex(item => item.name == sex);
+                items1[sexIndex].checked = true;
+
+                // 证件类型
+                let idTypeIndex = items2.findIndex(item => item.name == idType);
+                items2[idTypeIndex].checked = true;
+
+                // 设置区
+                let areaIndex = areas.findIndex(item => item.areaName == area);
+
+
+                // 设置家庭成员信息  
+                //配偶
+                if (spouseName == "" && spouseMobile == "" && spouseIdNumber == "") {
+                    this.setData({
+                        disabledNoBjMate: true
+                    })
+                } else {
+                    this.setData({
+                        disabledNoBjMate: false
+                    })
+                }
+                // 子女
+                if (childrenNames == "" && childrenIdNumbers == "") {
+                    this.setData({
+                        disabledNoBjChild: true
+                    })
+                } else {
+                    this.setData({
+                        disabledNoBjChild: false
+                    })
+                };
+                // 父母
+
+                if (parentNames == "" && parentIdNumbers == "") {
+                    this.setData({
+                        disabledNoBjParent: true
+                    })
+                } else {
+                    this.setData({
+                        disabledNoBjParent: false
+                    })
+                }
+
+                // 返京前地址数据回显 
+                // returnProvince
+                // console.log(returnProvince)
+                // console.log(provinceList.findIndex(item => item.cityFullName == returnProvince))
+                this.setData({
+                    provinceListIndex: provinceList.findIndex(item => item.cityFullName == returnProvince)
+                })
+                // 设置疫情防控相关信息回显
+                let fyIndex1 = items3.findIndex(item => item.name == relation);
+                if (fyIndex1 > -1) {
+                    items3[fyIndex1].checked = true;
+                }
+
+                let fyIndex2 = items4.findIndex(item => item.name == returnTraffic);
+                if (fyIndex2 > -1) {
+                    items4[fyIndex2].checked = true;
+                }
+                let fyIndex3 = items5.findIndex(item => item.name == divideType);
+                if (fyIndex3 > -1) {
+                    items5[fyIndex3].checked = true;
+                }
+                let fyIndex4 = items6.findIndex(item => item.name == isSingleRoom);
+                if (fyIndex4 > -1) {
+                    items6[fyIndex4].checked = true;
+                }
+                this.setData({
+                    items, items1, items2, items3, items4, items5, items6,
+                    areasIndex: areaIndex
+                })
+
             })
+
         });
 
         this.initValidate();
     },
-
-    handleSetData(){
-        const { tenantInfo, items, items1, items2, provinceList, areas, items3, items4, items5, items6 } = this.data;
-        const {
-            inStatus,
-            sex,
-            idType,
-            area,
-            spouseName,
-            spouseMobile,
-            spouseIdNumber,
-            childrenNames,
-            childrenIdNumbers,
-            parentNames,
-            parentIdNumbers,
-            relation,
-            returnTraffic,
-            divideType,
-            isSingleRoom,
-            returnProvince
-        } = tenantInfo;
-        // 在京状态数据回显
-        items.forEach(item => {
-            item['checked'] = false;
-        })
-        let inStatusText = items.findIndex(item => item.name == inStatus);
-        this.radioChange({ detail: { value: inStatus } });
-        
-        items[inStatusText].checked = true;
-        // 男女数据回显
-
-        items1.forEach(item => {
-            item['checked'] = false;
-        })
-        let sexIndex = items1.findIndex(item => item.name == sex);
-        items1[sexIndex].checked = true;
-
-        // 证件类型
-        items2.forEach(item => {
-            item['checked'] = false;
-        })
-        let idTypeIndex = items2.findIndex(item => item.name == idType);
-        items2[idTypeIndex].checked = true;
-
-        // 设置区
-        let areaIndex = areas.findIndex(item => item.areaName == area);
-
-
-        // 设置家庭成员信息  
-        //配偶
-        if (spouseName == "" && spouseMobile == "" && spouseIdNumber == "") {
-            this.setData({
-                disabledNoBjMate: true
-            })
-        } else {
-            this.setData({
-                disabledNoBjMate: false
-            })
-        }
-        // 子女
-        if (childrenNames == "" && childrenIdNumbers == "") {
-            this.setData({
-                disabledNoBjChild: true
-            })
-        } else {
-            this.setData({
-                disabledNoBjChild: false
-            })
-        };
-        // 父母
-
-        if (parentNames == "" && parentIdNumbers == "") {
-            this.setData({
-                disabledNoBjParent: true
-            })
-        } else {
-            this.setData({
-                disabledNoBjParent: false
-            })
-        }
-
-        // 返京前地址数据回显 
-        // returnProvince
-        // console.log(returnProvince)
-        // console.log(provinceList.findIndex(item => item.cityFullName == returnProvince))
-        this.setData({
-            provinceListIndex: provinceList.findIndex(item => item.cityFullName == returnProvince)
-        })
-        // 设置疫情防控相关信息回显
-        let fyIndex1 = items3.findIndex(item => item.name == relation);
-        if (fyIndex1 > -1) {
-            items3[fyIndex1].checked = true;
-        }
-
-        let fyIndex2 = items4.findIndex(item => item.name == returnTraffic);
-        if (fyIndex2 > -1) {
-            items4[fyIndex2].checked = true;
-        }
-        let fyIndex3 = items5.findIndex(item => item.name == divideType);
-        if (fyIndex3 > -1) {
-            items5[fyIndex3].checked = true;
-        }
-        let fyIndex4 = items6.findIndex(item => item.name == isSingleRoom);
-        if (fyIndex4 > -1) {
-            items6[fyIndex4].checked = true;
-        }
-        this.setData({
-            items, items1, items2, items3, items4, items5, items6,
-            areasIndex: areaIndex
-        })
-
-    },
-
 
     initValidate() {
         let rules = {
@@ -309,38 +284,6 @@ Page({
         })
     },
 
-    // 身份证选择
-    handleGetAllTenantInfoByOpenid(){
-        return new Promise((resolve,reject)=>{
-            http(`/investigationController/getAllTenantInfoByOpenid.act?openid=${appInst.globalData.openId}`)
-                .then(res => {
-                    if (res.data.rtState && res.data.rtData.length) {
-                        this.setData({
-                            idNumberList: res.data.rtData
-                        }, () => {
-                            const { idNumberList } = this.data; 
-                            resolve(idNumberList[0]);
-                        })
-                    }
-                })
-        })
-        
-    },
-    bindPickerChangeIdNumber(e){
-        this.setData({
-            idNumberIndex:e.detail.value
-        },()=>{
-            const { idNumberList, idNumberIndex} = this.data;
-            this.setData({
-                tenantInfo: idNumberList[idNumberIndex]
-            },()=>{
-                const { tenantInfo } = this.data;
-                this.handleSetData();
-                this.handleGetProvinceList();
-                this.handleGetAreaList();
-            })
-        })
-    },
     // 获取全国省
     handleGetProvinceList() {
         return new Promise((resolve, reject) => {
@@ -349,6 +292,9 @@ Page({
                 if (res.data.rtState) {
                     this.setData({
                         provinceList: [{ cityFullName:"请选择省"}].concat(res.data.rtData),
+
+
+
                     }, () => {
                         const { tenantInfo, provinceList } = this.data;
                         if (tenantInfo.returnProvince != "") {
@@ -529,7 +475,7 @@ Page({
             item['checked'] = false;
         });
         this.setData({
-            items3, items4, items5, items6,returnBeforeBjAddressDisabled:false,epidemicRelatedDisabled:true,landlordDisabled:false
+            items3, items4, items5, items6
         })
         if (value == '未离京') {
             this.setData({
@@ -542,17 +488,7 @@ Page({
                 "tenantInfo.relation": "",
                 "tenantInfo.returnTraffic": "",
                 "tenantInfo.divideType": "",
-                "tenantInfo.isSingleRoom": "",
-                provinceListIndex: 0,
-                cityListIndex: 0,
-                countyListIndex: 0,
-                "tenantInfo.returnProvince": "",
-                "tenantInfo.returnCity": "",
-                "tenantInfo.returnCounty": "",
-                "tenantInfo.returnStreet": '',
-                "tenantInfo.returnDetailAddress": "",
-                returnBeforeBjAddressDisabled:true
-
+                "tenantInfo.isSingleRoom": ""
             })
         } else if (value == '离京未返京') {
             this.setData({
@@ -563,41 +499,13 @@ Page({
                 "tenantInfo.relation": "",
                 "tenantInfo.returnTraffic": "",
                 "tenantInfo.divideType": "",
-                "tenantInfo.isSingleRoom": "",
-                
+                "tenantInfo.isSingleRoom": ""
             })
-        } else if(value == "离京已返京") {
+        } else {
             this.setData({
                 pickDisabled: false,
                 pickDisabled1: false,
-                pickDisabled2: true,
-                "tenantInfo.expectReturnDate": "",
-                epidemicRelatedDisabled:false
-            })
-        } else if(value == "已搬离北京"){
-            this.setData({
-                pickDisabled: false,
-                pickDisabled1: true,
-                pickDisabled2: true,
-                "tenantInfo.returnDate": "",
-                "tenantInfo.expectReturnDate": "",
-                "tenantInfo.relation": "",
-                "tenantInfo.returnTraffic": "",
-                "tenantInfo.divideType": "",
-                "tenantInfo.isSingleRoom": "",
-                provinceListIndex: 0,
-                cityListIndex: 0,
-                countyListIndex: 0,
-                "tenantInfo.returnProvince": "",
-                "tenantInfo.returnCity": "",
-                "tenantInfo.returnCounty": "",
-                "tenantInfo.returnStreet": '',
-                "tenantInfo.returnDetailAddress": "",
-                "tenantInfo.landlordName": "",
-                "tenantInfo.landlordMobile": "",
-                "tenantInfo.landlordWeixin": "",
-                returnBeforeBjAddressDisabled:true,
-                landlordDisabled:true
+                pickDisabled2: true
             })
         }
     },
@@ -859,7 +767,7 @@ Page({
             });
             return false;
         }
-        if (tenantInfo.inStatus == "离京未返京" || tenantInfo.inStatus == "离京已返京") {
+        if (tenantInfo.inStatus != "未离京") {
 
             if (tenantInfo.returnProvince == "" || tenantInfo.returnProvince == null || tenantInfo.returnProvince =="请选择省") {
                 wx.showToast({
@@ -1068,18 +976,6 @@ Page({
                 return false;
             }
         }
-
-        if(tenantInfo.inStatus == '已搬离北京'){
-            if (tenantInfo.leaveDate == "" || tenantInfo.leaveDate == null) {
-                wx.showToast({
-                    title: '请选择离京日期',
-                    icon: 'none',
-                    duration: 2000
-                });
-                return false;
-            }
-        }
-
         for (let key in tenantInfo) {
             if (objData.hasOwnProperty(key)) {
                 tenantInfo[key] = objData[key];
@@ -1087,8 +983,6 @@ Page({
                 tenantInfo[key] = tenantInfo[key];
             }
         }
-        delete tenantInfo['addTime'];
-        delete tenantInfo['sid'];
         this.setData({
             tenantInfo
         });

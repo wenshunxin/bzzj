@@ -21,7 +21,7 @@ Page({
         items4: [{ name: "37.2度以下", checked: false, disabled: false }, { name: "37.2度以上", checked: false, disabled: false}],
         items5: [{ name: "37.2度以下", checked: false, disabled: false }, { name: "37.2度以上", checked: false, disabled: false}],
 
-        startDate: "",
+        startDate: "2020-02-25",
         openId:"",
         checkinInfo:{
             sid:"",
@@ -38,13 +38,7 @@ Page({
         disabledBtn:false,
         endDate:"",
         userName: "",
-        userMobile: "",
-        // 当前日期
-        currentDate:"",
-
-
-        nameList:[],
-        nameIndex:0
+        userMobile: ""
     },
     onLoad(){
         let year = new Date().getFullYear();
@@ -54,107 +48,32 @@ Page({
             startDate: `${year}-${month}-${day}`,
             "checkinInfo.checkinDate":`${year}-${month}-${day}`,
             openId:appInst.globalData.openId,
-            endDate:`${year}-${month}-${day}`,
-            currentDate:`${year}-${month}-${day}`
-        },()=>{
-            this.handleGetNameAndMobileList();
+            endDate:`${year}-${month}-${day}`
         });
 
-        
+        this.handleGetNameAndMobile();
 
         this.initValidate();
-        // this.handleGetData(`${year}-${month}-${day}`)
+        this.handleGetData(`${year}-${month}-${day}`)
     },  
 
-    // handleGetData(startDate){
-    //     http(`/investigationController/getCheckinInfoByOpenidAnd.act?openid=${appInst.globalData.openId}&checkinDate=${startDate}`)
-    //     .then(res=>{
-            
-            
-    //     })
-    // },
-    // 获取 当前姓名和手机号
-    // handleGetNameAndMobile(){
-    //     http(`/investigationController/getCurTenantInfo.act?openid=${appInst.globalData.openId}`)
-    //     .then(res=>{
-    //         if(res.data.rtState){  
-
-    //             if(res.data.rtData == null || res.data.rtData.mobile == "" || res.data.rtData.mobile == null){
-    //                 wx.showModal({
-    //                     title: '提示',
-    //                     content: '请先填写离京返京信息',
-    //                     showCancel:false,
-    //                     success (res) {
-    //                         if (res.confirm) {
-    //                              wx.navigateBack();
-    //                         }
-    //                     }
-    //                 })
-    //                 return false;
-    //             }
-    //             this.setData({
-    //                 userName:res.data.rtData.userName,
-    //                 userMobile:res.data.rtData.mobile
-    //             })
-    //         }
-    //     })
-    // },
-
-    // 初始化姓名和手机号
-    handleGetNameAndMobileList(){
-        http(`/investigationController/getAllTenantInfoByOpenid.act?openid=${appInst.globalData.openId}`)
-        .then(res=>{
-            if(res.data.rtState && res.data.rtData.length){
-                this.setData({
-                    nameList:res.data.rtData,
-                    "checkinInfo.userName":res.data.rtData[0].userName,
-                    "checkinInfo.userMobile": res.data.rtData[0].mobile
-                },()=>{
-                    this.handleSetData(res.data.rtData[0].userName);
-                })
-            }else{
-                wx.showModal({
-                    title: '提示',
-                    content: '请先填写离京返京信息',
-                    showCancel:false,
-                    success (res) {
-                        if (res.confirm) {
-                            wx.navigateBack();
-                        }
-                    }
-                })
-                return false;
-            }
-        })
-    },
-    bindPickerChangeName(e){
-        const { nameList } = this.data;
-        this.setData({
-            nameIndex:e.detail.value,
-            "checkinInfo.userName": nameList[e.detail.value].userName,
-            "checkinInfo.userMobile": nameList[e.detail.value].mobile
-        },()=>{
-            this.handleSetData(this.data.nameList[this.data.nameIndex].userName);
-        })
-    },
-
-    handleSetData(userName){
-        http(`/investigationController/getCheckinInfoByOpenidAndUserName.act?openid=${appInst.globalData.openId}&userName=${userName}&checkinDate=${this.data.startDate}`)
+    handleGetData(startDate){
+        http(`/investigationController/getCheckinInfoByOpenidAnd.act?openid=${appInst.globalData.openId}&checkinDate=${startDate}`)
         .then(res=>{
             // 数据回显
-            if (res.data.rtState && res.data.rtData != null) {
+            if (res.data.rtState && res.data.rtData != null){
                 this.setData({
-                    disabledBtn: true,
+                    disabledBtn:true,
                     items1: [
                         { name: "良好", checked: false }, { name: "不舒服", checked: false }
                     ],
-                    disabledChecbox: false,
+                    disabledChecbox:false,
                     items: [
-                        { name: "发热", checked: false },
-                        { name: "乏力", checked: false },
-                        { name: "干咳", checked: false },
-                        { name: "呼吸困难", checked: false },
-                        { name: "其他", checked: false }],
+                        {name:"发热",checked:false},
+                        {name:"乏力",checked:false},
+                        {name:"干咳",checked:false},
+                        {name:"呼吸困难",checked:false},
+                        {name:"其他",checked:false}],
                     items2: [{ name: '有', checked: false }, { name: "无", checked: false }],
                     items3: [{ name: "37.2度以下", checked: false }, { name: "37.2度以上", checked: false }],
                     items4: [{ name: "37.2度以下", checked: false }, { name: "37.2度以上", checked: false }],
@@ -163,22 +82,22 @@ Page({
                 const { healthyStatus, bodyStatus, goOut, forenoon, noon, night } = res.data.rtData;
                 const { items, items1, items2, items3, items4, items5 } = this.data;
                 // 健康状态
-                items1.forEach(item => {
+                items1.forEach(item=>{
                     item['disabled'] = true;
                 })
-                let itemsIndex = items1.findIndex(item => item.name == healthyStatus);
+                let itemsIndex = items1.findIndex(item=>item.name == healthyStatus);
                 items1[itemsIndex].checked = true;
                 items1[itemsIndex].disabled = false;
 
-                this.radioChangeHealthyStatus({ detail: { value: healthyStatus } });
-
-                for (let i = 0; i < items.length; i++) {
+                this.radioChangeHealthyStatus({ detail: { value: healthyStatus}});
+                
+                for(let i=0;i<items.length;i++){
                     let it = items[i];
                     it['disabled'] = true;
-                    if (bodyStatus.indexOf(it.name) > -1) {
+                    if (bodyStatus.indexOf(it.name)>-1){
                         items[i].checked = true;
                         // it['disabled'] = false;
-                    } else {
+                    }else{
                         items[i].checked = false;
                     }
                 }
@@ -212,67 +131,65 @@ Page({
                 items5[items5Index].disabled = false;
 
                 this.setData({
-                    items, items1, items2, items3, items4, items5
+                    items,items1, items2, items3, items4, items5
                 })
-            } else {
-                let date1 = new Date(this.data.startDate).getTime();
-                let date2 = new Date(this.data.currentDate).getTime();
-                if (date2 > date1) {
-                    this.setData({
-                        disabledBtn: true,
-                        items1: [
-                            { name: "良好", checked: false, disabled: true }, { name: "不舒服", checked: false, disabled: true }
-                        ],
-                        disabledChecbox: false,
-                        items: [
-                            { name: "发热", checked: false, disabled: true },
-                            { name: "乏力", checked: false, disabled: true },
-                            { name: "干咳", checked: false, disabled: true },
-                            { name: "呼吸困难", checked: false, disabled: true },
-                            { name: "其他", checked: false, disabled: true }],
-                        items2: [{ name: '有', checked: false, disabled: true }, { name: "无", checked: false, disabled: true }],
-                        items3: [{ name: "37.2度以下", checked: false, disabled: true }, { name: "37.2度以上", checked: false, disabled: true }],
-                        items4: [{ name: "37.2度以下", checked: false, disabled: true }, { name: "37.2度以上", checked: false, disabled: true }],
-                        items5: [{ name: "37.2度以下", checked: false, disabled: true }, { name: "37.2度以上", checked: false, disabled: true }],
-                        "checkinInfo.healthyStatus": "",
-                        "checkinInfo.bodyStatus": "",
-                        "checkinInfo.goOut": "",
-                        "checkinInfo.forenoon": "",
-                        "checkinInfo.noon": "",
-                        "checkinInfo.night": ""
-
-                    })
-                } else {
-                    this.setData({
-                        disabledBtn: false,
-                        items1: [
-                            { name: "良好", checked: false, checked: false }, { name: "不舒服", checked: false, checked: false }
-                        ],
-                        disabledChecbox: false,
-                        items: [
-                            { name: "发热", checked: false, checked: false },
-                            { name: "乏力", checked: false, checked: false },
-                            { name: "干咳", checked: false, checked: false },
-                            { name: "呼吸困难", checked: false, checked: false },
-                            { name: "其他", checked: false, checked: false }],
-                        items2: [{ name: '有', checked: false, checked: false }, { name: "无", checked: false, checked: false }],
-                        items3: [{ name: "37.2度以下", checked: false, checked: false }, { name: "37.2度以上", checked: false, checked: false }],
-                        items4: [{ name: "37.2度以下", checked: false, checked: false }, { name: "37.2度以上", checked: false, checked: false }],
-                        items5: [{ name: "37.2度以下", checked: false, checked: false }, { name: "37.2度以上", checked: false, checked: false }],
-                        "checkinInfo.healthyStatus": "",
-                        "checkinInfo.bodyStatus": "",
-                        "checkinInfo.goOut": "",
-                        "checkinInfo.forenoon": "",
-                        "checkinInfo.noon": "",
-                        "checkinInfo.night": ""
-
-                    })
-                }
+            }else{
+                this.setData({
+                    disabledBtn:false,
+                    items1: [
+                        { name: "良好", checked: false, checked: false }, { name: "不舒服", checked: false, checked: false}
+                    ],
+                    disabledChecbox:false,
+                    items: [
+                        { name: "发热", checked: false, checked: false},
+                        { name: "乏力", checked: false, checked: false},
+                        { name: "干咳", checked: false, checked: false},
+                        { name: "呼吸困难", checked: false, checked: false},
+                        { name: "其他", checked: false, checked: false}],
+                    items2: [{ name: '有', checked: false, checked: false}, { name: "无", checked: false, checked: false}],
+                    items3: [{ name: "37.2度以下", checked: false, checked: false }, { name: "37.2度以上", checked: false, checked: false}],
+                    items4: [{ name: "37.2度以下", checked: false, checked: false }, { name: "37.2度以上", checked: false, checked: false }],
+                    items5: [{ name: "37.2度以下", checked: false, checked: false }, { name: "37.2度以上", checked: false, checked: false}],
+                    "checkinInfo.healthyStatus": "",
+                    "checkinInfo.bodyStatus": "",
+                    "checkinInfo.goOut": "",
+                    "checkinInfo.forenoon": "",
+                    "checkinInfo.noon": "",
+                    "checkinInfo.night": ""
+                    
+                },()=>{
+                    
+                     
+                })
             }
         })
     },
+    // 获取 当前姓名和手机号
+    handleGetNameAndMobile(){
+        http(`/investigationController/getCurTenantInfo.act?openid=${appInst.globalData.openId}`)
+        .then(res=>{
+            if(res.data.rtState){  
 
-
+                if(res.data.rtData == null || res.data.rtData.mobile == "" || res.data.rtData.mobile == null){
+                    wx.showModal({
+                        title: '提示',
+                        content: '请先填写离京返京信息',
+                        showCancel:false,
+                        success (res) {
+                            if (res.confirm) {
+                                 wx.navigateBack();
+                            }
+                        }
+                    })
+                    return false;
+                }
+                this.setData({
+                    userName:res.data.rtData.userName,
+                    userMobile:res.data.rtData.mobile
+                })
+            }
+        })
+    },
 
     bindPickerChangeCheckDate(e){
         // console.log(e)
@@ -280,8 +197,7 @@ Page({
             startDate:e.detail.value,
             "checkinInfo.checkinDate":e.detail.value
         },()=>{
-            // this.handleGetData(e.detail.value)
-            this.handleSetData(this.data.nameList[this.data.nameIndex].userName);
+            this.handleGetData(e.detail.value)
         })
     },
     radioChangeHealthyStatus(e){
@@ -354,6 +270,7 @@ Page({
     },
     formSubmit(e){
         let { checkinInfo } = this.data;
+        console.log(checkinInfo)
         let objData = e.detail.value;
 
         // if (!this.WxValidate.checkForm(objData)) {
@@ -366,6 +283,24 @@ Page({
         //     });
         //     return false;
         // }
+
+        if (objData.userName == '' || objData.userName == null){
+            wx.showToast({
+                title: '请填写姓名',
+                icon: 'none',
+                duration: 2000
+            });
+            return false;
+        }
+
+        if (objData.userMobile == '' || objData.userMobile == null) {
+            wx.showToast({
+                title: '请填写电话',
+                icon: 'none',
+                duration: 2000
+            });
+            return false;
+        }
         // 健康状况
         if (checkinInfo.healthyStatus == '' || checkinInfo.healthyStatus == null) {
             wx.showToast({
@@ -436,6 +371,8 @@ Page({
                 checkinInfo[key] = objData[key];
             }
         }
+        checkinInfo['userName'] = this.data.userName;
+        checkinInfo['userMobile'] = this.data.userMobile;
         // checkinInfo['addTime'] = new Date().getFullYear() + "-" + new Date().getMonth() + 1 + "-" + new Date().getDay();
         this.setData({
             checkinInfo
